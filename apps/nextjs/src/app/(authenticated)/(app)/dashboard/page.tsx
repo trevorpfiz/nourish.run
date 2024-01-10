@@ -1,12 +1,15 @@
 import { Suspense } from "react";
+import Link from "next/link";
+
+import { Button } from "@nourish/ui/button";
 
 import { api } from "~/trpc/server";
-import { AuthShowcase } from "./_components/auth-showcase";
+import { AuthShowcase } from "../../../_components/auth-showcase";
 import {
   CreatePostForm,
   PostCardSkeleton,
   PostList,
-} from "./_components/posts";
+} from "../../../_components/posts";
 
 export const runtime = "edge";
 
@@ -23,6 +26,9 @@ export default async function HomePage() {
         <h1 className="text-5xl font-extrabold tracking-tight sm:text-[5rem]">
           Create <span className="text-primary">T3</span> Turbo
         </h1>
+        <Button asChild>
+          <Link href="/sign-up">Get Started</Link>
+        </Button>
         <AuthShowcase />
 
         <CreatePostForm />
