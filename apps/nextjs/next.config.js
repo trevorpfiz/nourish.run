@@ -1,6 +1,6 @@
 // Importing env files here to validate on build
 import "./src/env.js";
-import "@acme/auth/env";
+import "@nourish/auth/env";
 
 /** @type {import("next").NextConfig} */
 const config = {
@@ -8,11 +8,11 @@ const config = {
 
   /** Enables hot reloading for local packages without a build step */
   transpilePackages: [
-    "@acme/api",
-    "@acme/auth",
-    "@acme/db",
-    "@acme/ui",
-    "@acme/validators",
+    "@nourish/api",
+    "@nourish/auth",
+    "@nourish/db",
+    "@nourish/ui",
+    "@nourish/validators",
   ],
 
   /** We already do linting and typechecking as separate tasks in CI */

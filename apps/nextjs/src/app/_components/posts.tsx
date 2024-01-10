@@ -1,8 +1,8 @@
 "use client";
 
-import type { RouterOutputs } from "@acme/api";
-import { cn } from "@acme/ui";
-import { Button } from "@acme/ui/button";
+import type { RouterOutputs } from "@nourish/api";
+import { cn } from "@nourish/ui";
+import { Button } from "@nourish/ui/button";
 import {
   Form,
   FormControl,
@@ -10,10 +10,10 @@ import {
   FormItem,
   FormMessage,
   useForm,
-} from "@acme/ui/form";
-import { Input } from "@acme/ui/input";
-import { toast } from "@acme/ui/toast";
-import { CreatePostSchema } from "@acme/validators";
+} from "@nourish/ui/form";
+import { Input } from "@nourish/ui/input";
+import { toast } from "@nourish/ui/toast";
+import { CreatePostSchema } from "@nourish/validators";
 
 import { api } from "~/trpc/react";
 
