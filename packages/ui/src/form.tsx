@@ -21,6 +21,7 @@ import {
 import { cn } from ".";
 import { Label } from "./label";
 
+// custom function so don't have to import react-hook-form or zod
 function useForm<TSchema extends ZodType>(
   props: Omit<UseFormProps<TSchema["_input"]>, "resolver"> & {
     schema: TSchema;

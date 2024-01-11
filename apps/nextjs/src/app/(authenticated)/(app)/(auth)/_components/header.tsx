@@ -4,9 +4,9 @@ interface HeaderProps {
 
 export const Header = ({ label }: HeaderProps) => {
   return (
-    <div className="flex w-full flex-col items-center justify-center gap-4">
-      <h1 className={"text-3xl font-semibold"}>Auth</h1>
-      <p className="text-muted-foregroudn text-sm">{label}</p>
+    <div className="flex w-full flex-col justify-center gap-4">
+      <h1 className={"text-md"}>Nourish</h1>
+      <p className="text-2xl font-bold">{label}</p>
     </div>
   );
 };
