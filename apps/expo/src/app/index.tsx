@@ -6,6 +6,7 @@ import { FlashList } from "@shopify/flash-list";
 
 import type { RouterOutputs } from "~/utils/api";
 import { api } from "~/utils/api";
+import { useSignIn, useSignOut, useUser } from "~/utils/auth";
 
 function PostCard(props: {
   post: RouterOutputs["post"]["all"][number];
@@ -96,17 +97,40 @@ function CreatePost() {
   );
 }
 
+function MobileAuth() {
+  const user = useUser();
+  const signIn = useSignIn();
+  const signOut = useSignOut();
+
+  return (
+    <>
+      <Text className="pb-2 text-center text-xl font-semibold text-white">
+        {user?.name ?? "Not logged in"}
+      </Text>
+      <Button
+        onPress={() => (user ? signOut() : signIn())}
+        title={user ? "Sign Out" : "Sign In With Discord"}
+        color={"#5B65E9"}
+      />
+    </>
+  );
+}
+
 export default function Index() {
   const utils = api.useUtils();
 
   const postQuery = api.post.all.useQuery();
+
+  const user = useUser();
+  const signIn = useSignIn();
+  const signOut = useSignOut();
 
   const deletePostMutation = api.post.delete.useMutation({
     onSettled: () => utils.post.all.invalidate(),
   });
 
   return (
-    <SafeAreaView className="bg-[#1F104A]">
+    <SafeAreaView style={{ backgroundColor: "#1F104A" }}>
       {/* Changes page title visible on the header */}
       <Stack.Screen options={{ title: "Home Page" }} />
       <View className="h-full w-full p-4">
@@ -114,10 +138,21 @@ export default function Index() {
           Create <Text className="text-pink-400">T3</Text> Turbo
         </Text>
 
+        <MobileAuth />
+
         <Button
           onPress={() => void utils.post.all.invalidate()}
           title="Refresh posts"
           color={"#f472b6"}
+        />
+
+        <Text className="pb-2 text-center text-xl font-semibold text-white">
+          {user?.name ?? "Not logged in"}
+        </Text>
+        <Button
+          onPress={() => (user ? signOut() : signIn())}
+          title={user ? "Sign Out" : "Sign In With Discord"}
+          color={"#5B65E9"}
         />
 
         <View className="py-2">

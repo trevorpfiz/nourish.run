@@ -6,12 +6,13 @@
  * tl;dr - this is where all the tRPC server stuff is created and plugged in.
  * The pieces you will need to use are documented accordingly near the end
  */
-import type { Session } from "@nourish/auth";
-import { auth } from "@nourish/auth";
-import { db } from "@nourish/db";
 import { initTRPC, TRPCError } from "@trpc/server";
 import superjson from "superjson";
 import { ZodError } from "zod";
+
+import type { Session } from "@nourish/auth";
+import { auth, validateToken } from "@nourish/auth";
+import { db } from "@nourish/db";
 
 /**
  * 1. CONTEXT
@@ -29,14 +30,18 @@ export const createTRPCContext = async (opts: {
   headers: Headers;
   session: Session | null;
 }) => {
-  const session = opts.session ?? (await auth());
-  const source = opts.headers.get("x-trpc-source") ?? "unknown";
+  const authToken = opts.headers.get("Authorization") ?? null;
+  const session = authToken
+    ? await validateToken(authToken)
+    : opts.session ?? (await auth());
 
+  const source = opts.headers.get("x-trpc-source") ?? "unknown";
   console.log(">>> tRPC Request from", source, "by", session?.user);
 
   return {
     session,
     db,
+    token: authToken,
   };
 };
 
