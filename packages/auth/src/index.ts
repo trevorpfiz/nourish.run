@@ -1,9 +1,11 @@
 import type { DefaultSession, Session } from "next-auth";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import NextAuth from "next-auth";
-import Discord from "next-auth/providers/discord";
+import Google from "next-auth/providers/google";
 
 import { db, tableCreator } from "@nourish/db";
+
+import { env } from "../env";
 
 export type { Session } from "next-auth";
 
@@ -24,7 +26,12 @@ export const {
   signOut,
 } = NextAuth({
   adapter,
-  providers: [Discord],
+  providers: [
+    Google({
+      clientId: env.AUTH_GOOGLE_ID,
+      clientSecret: env.AUTH_GOOGLE_SECRET,
+    }),
+  ],
   callbacks: {
     session: ({ session, user }) => ({
       ...session,
@@ -33,6 +40,12 @@ export const {
         id: user.id,
       },
     }),
+    signIn: ({ account, profile }) => {
+      if (account?.provider === "google") {
+        return profile?.email_verified ?? false;
+      }
+      return true;
+    },
   },
 });
 
