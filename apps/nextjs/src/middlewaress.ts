@@ -1,9 +1,7 @@
+import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-import { auth } from "@nourish/auth";
-
 import { env } from "~/env";
-import { authRoutes } from "~/routes";
 
 export const config = {
   matcher: [
@@ -20,9 +18,8 @@ export const config = {
   ],
 };
 
-export default auth((req) => {
+export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
-  const isLoggedIn = !!req.auth;
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   let hostname = req.headers
@@ -48,7 +45,7 @@ export default auth((req) => {
 
   // Handle app subdomain
   if (hostname == `app.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    console.log(isLoggedIn, hostname, req.url, "apppppppppp");
+    console.log(hostname, req.url, "apppppppppp");
     // if (!isLoggedIn) {
     //   return NextResponse.redirect(new URL("/signin", req.url));
     // }
@@ -63,16 +60,12 @@ export default auth((req) => {
     hostname === "local.run:3000" ||
     hostname.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) // e.g. www.domain.com
   ) {
-    console.log(isLoggedIn, hostname, req.url, "mainnnnnnn");
+    console.log(hostname, req.url, "mainnnnnnn");
 
     const isDevelopment = process.env.NODE_ENV === "development";
     const baseUrl = isDevelopment
       ? `http://app.${hostname}`
       : `https://app.${env.NEXT_PUBLIC_ROOT_DOMAIN}`;
-
-    if (isLoggedIn && authRoutes.includes(path)) {
-      return NextResponse.redirect(new URL(baseUrl));
-    }
 
     return NextResponse.rewrite(
       new URL(`/home${path === "/" ? "" : path}`, req.url),
@@ -81,4 +74,4 @@ export default auth((req) => {
 
   // Allow normal processing for all other requests
   return NextResponse.next();
-});
+}
