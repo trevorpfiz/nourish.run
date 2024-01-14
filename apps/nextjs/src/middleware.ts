@@ -74,7 +74,7 @@ export default auth((req) => {
   // Handle main domain
   if (
     hostname === "localhost:3000" ||
-    hostname === env.NEXT_PUBLIC_ROOT_DOMAIN
+    hostname.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) // e.g. www.nourish.run
   ) {
     console.log(isLoggedIn, hostname, req.url, "mainnnnnnn");
 
