@@ -19,6 +19,9 @@ declare module "next-auth" {
 
 const adapter = DrizzleAdapter(db, tableCreator);
 
+const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
+console.log(VERCEL_DEPLOYMENT);
+
 export const {
   handlers: { GET, POST },
   auth,
@@ -26,12 +29,22 @@ export const {
   signOut,
 } = NextAuth({
   adapter,
-  providers: [
-    Google({
-      clientId: env.AUTH_GOOGLE_ID,
-      clientSecret: env.AUTH_GOOGLE_SECRET,
-    }),
-  ],
+  providers: [Google],
+  cookies: {
+    sessionToken: {
+      name: `${VERCEL_DEPLOYMENT ? "__Secure-" : ""}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        // When working on localhost, the cookie domain must be omitted entirely (https://stackoverflow.com/a/1188145)
+        domain: VERCEL_DEPLOYMENT
+          ? `.${env.NEXT_PUBLIC_ROOT_DOMAIN}`
+          : undefined,
+        secure: VERCEL_DEPLOYMENT,
+      },
+    },
+  },
   callbacks: {
     session: ({ session, user }) => ({
       ...session,

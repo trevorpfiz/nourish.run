@@ -16,7 +16,7 @@ export const GetStartedButton = ({
   const router = useRouter();
 
   const onClick = () => {
-    router.push("/sign-up");
+    router.push("/signup");
   };
 
   if (mode === "modal") {

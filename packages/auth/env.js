@@ -17,12 +17,16 @@ export const env = createEnv({
       process.env.VERCEL ? z.string() : z.string().url(),
     ),
   },
-  client: {},
+  client: {
+    NEXT_PUBLIC_ROOT_DOMAIN: z.string(),
+  },
   runtimeEnv: {
     AUTH_GOOGLE_ID: process.env.AUTH_GOOGLE_ID,
     AUTH_GOOGLE_SECRET: process.env.AUTH_GOOGLE_SECRET,
     AUTH_SECRET: process.env.AUTH_SECRET,
     AUTH_URL: process.env.AUTH_URL,
+
+    NEXT_PUBLIC_ROOT_DOMAIN: process.env.NEXT_PUBLIC_ROOT_DOMAIN,
   },
   skipValidation: !!process.env.CI || !!process.env.SKIP_ENV_VALIDATION,
 });

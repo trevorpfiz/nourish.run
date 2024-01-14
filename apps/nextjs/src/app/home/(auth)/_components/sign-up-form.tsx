@@ -2,7 +2,7 @@
 
 import { useState, useTransition } from "react";
 
-import type { SignInSchemaType } from "@nourish/validators";
+import type { SignUpSchemaType } from "@nourish/validators";
 import { Button } from "@nourish/ui/button";
 import {
   Form,
@@ -14,31 +14,31 @@ import {
   useForm,
 } from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
-import { SignInSchema } from "@nourish/validators";
+import { SignUpSchema } from "@nourish/validators";
 
-import { signIn } from "~/app/_actions/auth";
-import { FormError } from "~/app/(app)/(auth)/_components/form-error";
-import { FormSuccess } from "~/app/(app)/(auth)/_components/form-success";
+import { signUp } from "~/app/_actions/auth";
+import { FormError } from "~/app/home/(auth)/_components/form-error";
+import { FormSuccess } from "~/app/home/(auth)/_components/form-success";
 
-export const SignInForm = () => {
+export const SignUpForm = () => {
   const [error, setError] = useState<string | undefined>("");
   const [success, setSuccess] = useState<string | undefined>("");
   const [isPending, startTransition] = useTransition();
 
   const form = useForm({
-    schema: SignInSchema,
+    schema: SignUpSchema,
     defaultValues: {
       email: "",
       password: "",
     },
   });
 
-  const onSubmit = (values: SignInSchemaType) => {
+  const onSubmit = (values: SignUpSchemaType) => {
     setError("");
     setSuccess("");
 
     startTransition(async () => {
-      const response = await signIn(values);
+      const response = await signUp(values);
 
       if (response.status === "error") {
         setError(response?.error?.message);

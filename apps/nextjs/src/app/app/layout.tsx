@@ -1,12 +1,15 @@
 import type { Metadata, Viewport } from "next";
+import { cache } from "react";
+import { headers } from "next/headers";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
 
 import { cn } from "@nourish/ui";
-import { ThemeProvider, ThemeToggle } from "@nourish/ui/theme";
+import { ThemeProvider } from "@nourish/ui/theme";
 import { Toaster } from "@nourish/ui/toast";
 
 import { env } from "~/env";
+import { TRPCReactProvider } from "~/trpc/react";
 
 import "~/app/globals.css";
 
@@ -38,6 +41,8 @@ export const viewport: Viewport = {
   ],
 };
 
+const getHeaders = cache(async () => headers());
+
 export default function RootLayout(props: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
@@ -49,10 +54,9 @@ export default function RootLayout(props: { children: React.ReactNode }) {
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="light">
-          {props.children}
-          <div className="absolute bottom-4 right-4">
-            <ThemeToggle />
-          </div>
+          <TRPCReactProvider headersPromise={getHeaders()}>
+            {props.children}
+          </TRPCReactProvider>
           <Toaster />
         </ThemeProvider>
       </body>

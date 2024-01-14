@@ -27,7 +27,7 @@ export default async function HomePage() {
           Create <span className="text-primary">T3</span> Turbo
         </h1>
         <Button asChild>
-          <Link href="/sign-up">Get Started</Link>
+          <Link href="/signup">Get Started</Link>
         </Button>
         <AuthShowcase />
 

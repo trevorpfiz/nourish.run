@@ -1,16 +1,16 @@
 /**
- * Represents an array of routes that are accessible to the public.
- * These routes do not require authentication.
- * @type {string[]} publicRoutes - The public routes.
+ * Represents an array of routes that require authentication.
+ * Users must be logged in to access these routes.
+ * @type {string[]} protectedRoutes - The protected routes.
  */
-export const publicRoutes = ["/"];
+export const protectedRoutes = ["/onboarding", "/dashboard"];
 
 /**
- * Represents an array of routes that are used for authentication.
+ * Represents an array of routes used for authentication.
  * Logged in users will be redirected to DEFAULT_LOGIN_REDIRECT when accessing these routes.
  * @type {string[]} authRoutes - The authentication routes.
  */
-export const authRoutes = ["/sign-in", "/sign-up"];
+export const authRoutes = ["/signin", "/signup"];
 
 /**
  * The prefix used for API authentication routes.
