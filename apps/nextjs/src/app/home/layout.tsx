@@ -13,16 +13,16 @@ import "~/app/globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL(
     env.VERCEL_ENV === "production"
-      ? "https://turbo.t3.gg"
+      ? "https://www.nourish.run"
       : "http://localhost:3000",
   ),
-  title: "Create T3 Turbo",
+  title: "Nourish",
   description: "Simple monorepo with shared backend for web & mobile apps",
   openGraph: {
-    title: "Create T3 Turbo",
+    title: "Nourish",
     description: "Simple monorepo with shared backend for web & mobile apps",
-    url: "https://create-t3-turbo.vercel.app",
-    siteName: "Create T3 Turbo",
+    url: "https://www.nourish.run",
+    siteName: "Nourish",
   },
   twitter: {
     card: "summary_large_image",
