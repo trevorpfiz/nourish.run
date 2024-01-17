@@ -12,7 +12,17 @@ export default async function HomePage() {
         <TopNavbar />
 
         {/* Content */}
-        <main className="relative h-full w-full flex-1 overflow-auto">
+        <main className="relative h-full w-full flex-1 overflow-auto px-4">
+          {/* Macros donut chart */}
+
+          {/* Macros progress charts  */}
+
+          {/* Macros bar chart */}
+
+          {/* Meal and snack cards */}
+
+          {/* Micros progress charts */}
+
           <AuthShowcase />
         </main>
 

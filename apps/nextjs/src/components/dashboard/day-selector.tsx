@@ -5,7 +5,6 @@ import { addDays, format, isToday, subDays } from "date-fns";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { cn } from "@nourish/ui";
-import { Button } from "@nourish/ui/button";
 import { Calendar } from "@nourish/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@nourish/ui/popover";
 
@@ -25,19 +24,17 @@ const DaySelector = () => {
 
   return (
     <div className="flex flex-row items-center">
-      <ChevronLeft className="mr-2 cursor-pointer" onClick={handlePrevDay} />
+      <ChevronLeft
+        className="mr-2 cursor-pointer"
+        strokeWidth={3}
+        onClick={handlePrevDay}
+      />
 
       <Popover>
         <PopoverTrigger asChild>
-          <Button
-            variant={"outline"}
-            className={cn(
-              "justify-start text-left font-normal",
-              !date && "text-muted-foreground",
-            )}
-          >
-            <span>{formatDateDisplay(date)}</span>
-          </Button>
+          <span className="text-sm font-bold uppercase">
+            {formatDateDisplay(date)}
+          </span>
         </PopoverTrigger>
         <PopoverContent className="w-auto p-0">
           <Calendar
@@ -53,6 +50,7 @@ const DaySelector = () => {
         className={cn("ml-2 cursor-pointer", {
           "text-muted-foreground": isToday(date),
         })}
+        strokeWidth={3}
         onClick={isToday(date) ? undefined : handleNextDay}
       />
     </div>
