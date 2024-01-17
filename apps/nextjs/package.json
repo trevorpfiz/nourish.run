@@ -14,6 +14,8 @@
     "with-env": "dotenv -e ../../.env --"
   },
   "dependencies": {
+    "@headlessui/tailwindcss": "^0.2.0",
+    "@heroicons/react": "^2.1.1",
     "@nourish/api": "workspace:^0.1.0",
     "@nourish/auth": "workspace:^0.1.0",
     "@nourish/db": "workspace:^0.1.0",
@@ -27,10 +29,13 @@
     "@trpc/client": "next",
     "@trpc/react-query": "next",
     "@trpc/server": "next",
+    "chart.js": "^4.4.1",
+    "date-fns": "^3.2.0",
     "geist": "^1.2.0",
     "lucide-react": "^0.309.0",
     "next": "^14.0.4",
     "react": "18.2.0",
+    "react-chartjs-2": "^5.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^5.0.0",
     "superjson": "2.2.1",
