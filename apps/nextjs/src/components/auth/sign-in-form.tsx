@@ -17,8 +17,8 @@ import { Input } from "@nourish/ui/input";
 import { SignInSchema } from "@nourish/validators";
 
 import { signIn } from "~/app/_actions/auth";
-import { FormError } from "~/app/home/(auth)/_components/form-error";
-import { FormSuccess } from "~/app/home/(auth)/_components/form-success";
+import { FormError } from "~/components/auth/form-error";
+import { FormSuccess } from "~/components/auth/form-success";
 
 export const SignInForm = () => {
   const [error, setError] = useState<string | undefined>("");

@@ -25,6 +25,7 @@ export default async function middleware(req: NextRequest) {
   const url = req.nextUrl;
   const session = await auth();
   const isLoggedIn = !!session?.user;
+  const isDevelopment = process.env.NODE_ENV === "development";
 
   // Get hostname of request (e.g. demo.vercel.pub, demo.localhost:3000)
   let hostname = req.headers
@@ -46,16 +47,18 @@ export default async function middleware(req: NextRequest) {
     searchParams.length > 0 ? `?${searchParams}` : ""
   }`;
 
-  console.log(hostname, path, url, req.url);
-
   // Handle app subdomain
   if (hostname == `app.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) {
-    console.log(isLoggedIn, hostname, req.url, "apppppppppp");
-    // if (!isLoggedIn) {
-    //   return NextResponse.redirect(new URL("/signin", req.url));
-    // }
+    // Define the redirect URL based on the environment
+    const redirectUrl = isDevelopment
+      ? `http://local.run:3000/auth/signin`
+      : `https://nourish.run/auth/signin`;
+
+    if (!isLoggedIn) {
+      return NextResponse.redirect(new URL(redirectUrl));
+    }
     return NextResponse.rewrite(
-      new URL(`/app${path === "/" ? "" : path}`, req.url),
+      new URL(`/app.nourish.run${path === "/" ? "" : path}`, req.url),
     );
   }
 
@@ -65,12 +68,9 @@ export default async function middleware(req: NextRequest) {
     hostname === "local.run:3000" ||
     hostname.endsWith(`.${env.NEXT_PUBLIC_ROOT_DOMAIN}`) // e.g. www.domain.com
   ) {
-    console.log(isLoggedIn, hostname, req.url, "mainnnnnnn");
-
-    const isDevelopment = process.env.NODE_ENV === "development";
     const baseUrl = isDevelopment
-      ? `http://app.${hostname}`
-      : `https://app.${env.NEXT_PUBLIC_ROOT_DOMAIN}`;
+      ? `http://app.${hostname}/dashboard`
+      : `https://app.${env.NEXT_PUBLIC_ROOT_DOMAIN}/dashboard`;
 
     if (isLoggedIn && authRoutes.includes(path)) {
       return NextResponse.redirect(new URL(baseUrl));

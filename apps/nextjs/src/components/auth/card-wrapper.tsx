@@ -1,8 +1,8 @@
 import { Card, CardContent, CardFooter, CardHeader } from "@nourish/ui/card";
 
-import { BackButton } from "~/app/home/(auth)/_components/back-button";
-import { Header } from "~/app/home/(auth)/_components/header";
-import { Social } from "~/app/home/(auth)/_components/social";
+import { BackButton } from "~/components/auth/back-button";
+import { Header } from "~/components/auth/header";
+import { Social } from "~/components/auth/social";
 
 interface CardWrapperProps {
   children: React.ReactNode;

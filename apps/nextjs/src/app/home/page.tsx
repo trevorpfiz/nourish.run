@@ -1,6 +1,6 @@
 import { Button } from "@nourish/ui/button";
 
-import { GetStartedButton } from "~/app/home/(auth)/_components/get-started-button";
+import { GetStartedButton } from "~/components/auth/get-started-button";
 
 export default function HomePage() {
   return (

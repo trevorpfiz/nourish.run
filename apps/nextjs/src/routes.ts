@@ -10,7 +10,7 @@ export const protectedRoutes = ["/onboarding", "/dashboard"];
  * Logged in users will be redirected to DEFAULT_LOGIN_REDIRECT when accessing these routes.
  * @type {string[]} authRoutes - The authentication routes.
  */
-export const authRoutes = ["/signin", "/signup"];
+export const authRoutes = ["/auth/signin", "/auth/signup"];
 
 /**
  * The prefix used for API authentication routes.

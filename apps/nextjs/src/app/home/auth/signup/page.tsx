@@ -1,5 +1,5 @@
-import { CardWrapper } from "~/app/home/(auth)/_components/card-wrapper";
-import { SignUpForm } from "~/app/home/(auth)/_components/sign-up-form";
+import { CardWrapper } from "~/components/auth/card-wrapper";
+import { SignUpForm } from "~/components/auth/sign-up-form";
 
 export default function SignUpPage() {
   return (
@@ -8,7 +8,7 @@ export default function SignUpPage() {
         headerLabel="Create your account"
         backButtonLabel="Have an account?"
         backButtonLinkLabel="Sign in"
-        backButtonHref="/signin"
+        backButtonHref="/auth/signin"
         showSocial
       >
         <SignUpForm />
