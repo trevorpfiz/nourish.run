@@ -17,6 +17,7 @@ const uri = [
 
 export default {
   schema: "./src/schema",
+  out: "./drizzle",
   driver: "mysql2",
   dbCredentials: { uri },
   tablesFilter: ["nourish_*"],

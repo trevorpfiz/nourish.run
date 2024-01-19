@@ -1,13 +1,12 @@
 import { connect } from "@planetscale/database";
 import { drizzle } from "drizzle-orm/planetscale-serverless";
 
-import * as auth from "./schema/auth";
-
-export const schema = { ...auth };
+import * as schema from "./schema";
 
 export { mySqlTable as tableCreator } from "./schema/_table";
 
 export * from "drizzle-orm";
+export * as schema from "./schema";
 
 const connection = connect({
   host: process.env.DB_HOST!,

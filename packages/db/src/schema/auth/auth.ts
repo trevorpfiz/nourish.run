@@ -1,14 +1,18 @@
 import { relations, sql } from "drizzle-orm";
 import {
+  decimal,
   index,
   int,
+  mediumint,
   primaryKey,
+  smallint,
   text,
   timestamp,
   varchar,
 } from "drizzle-orm/mysql-core";
 
-import { mySqlTable } from "./_table";
+import { mySqlTable } from "../_table";
+import { nutrition } from "../nutrition";
 
 export const users = mySqlTable(
   "user",
@@ -22,7 +26,23 @@ export const users = mySqlTable(
     }).default(sql`CURRENT_TIMESTAMP(3)`),
     image: varchar("image", { length: 255 }),
     // unique username
-    username: varchar("username", { length: 30 }).notNull().unique(),
+    username: varchar("username", { length: 30 }).unique(),
+    // extra fields
+    age: smallint("age"),
+    birth_sex: varchar("birth_sex", { length: 10 }),
+    height_cm: decimal("height_cm", { precision: 5, scale: 2 }),
+    weight_kg: decimal("weight_kg", { precision: 5, scale: 2 }),
+    activity_level: varchar("activity_level", { length: 50 }),
+    energy_expenditure: mediumint("energy_expenditure"),
+    allergies: text("allergies"),
+    dietary_preferences: text("dietary_preferences"),
+    medical_conditions: text("medical_conditions"),
+    medications: text("medications"),
+    nutritional_goals: text("nutritional_goals"),
+    ethnicity: varchar("ethnicity", { length: 50 }),
+    budget: decimal("budget", { precision: 10, scale: 2 }),
+    createdAt: timestamp("createdAt").defaultNow(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
   (user) => ({
     usernameIdx: index("username_idx").on(user.username),
@@ -31,6 +51,7 @@ export const users = mySqlTable(
 
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
+  nutrition: many(nutrition),
 }));
 
 export const accounts = mySqlTable(

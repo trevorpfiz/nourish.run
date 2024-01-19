@@ -46,13 +46,17 @@ export const {
     },
   },
   callbacks: {
-    session: ({ session, user }) => ({
-      ...session,
-      user: {
-        ...session.user,
-        id: user.id,
-      },
-    }),
+    session: (opts) => {
+      if (!("user" in opts)) throw "unreachable with session strategy";
+
+      return {
+        ...opts.session,
+        user: {
+          ...opts.session.user,
+          id: opts.user.id,
+        },
+      };
+    },
     signIn: ({ account, profile }) => {
       if (account?.provider === "google") {
         return profile?.email_verified ?? false;

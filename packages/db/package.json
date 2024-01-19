@@ -13,11 +13,14 @@
     "lint": "eslint .",
     "push": "drizzle-kit push:mysql",
     "studio": "drizzle-kit studio",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "dump": "pscale db dump nourish dev --output nourish_dump",
+    "combine:sql": "cat *.sql > combined.sql"
   },
   "dependencies": {
     "@planetscale/database": "^1.13.0",
-    "drizzle-orm": "^0.29.3"
+    "drizzle-orm": "^0.29.3",
+    "drizzle-zod": "^0.5.1"
   },
   "devDependencies": {
     "@nourish/eslint-config": "workspace:^0.2.0",
