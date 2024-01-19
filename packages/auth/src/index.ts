@@ -20,7 +20,6 @@ declare module "next-auth" {
 const adapter = DrizzleAdapter(db, tableCreator);
 
 const VERCEL_DEPLOYMENT = !!process.env.VERCEL_URL;
-console.log(VERCEL_DEPLOYMENT);
 
 export const {
   handlers: { GET, POST },

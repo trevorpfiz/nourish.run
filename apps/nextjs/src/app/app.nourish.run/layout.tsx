@@ -3,6 +3,7 @@ import { cache } from "react";
 import { headers } from "next/headers";
 import { GeistMono } from "geist/font/mono";
 import { GeistSans } from "geist/font/sans";
+import { Provider } from "jotai";
 
 import { cn } from "@nourish/ui";
 import { ThemeProvider } from "@nourish/ui/theme";
@@ -55,7 +56,7 @@ export default function RootLayout(props: { children: React.ReactNode }) {
       >
         <ThemeProvider attribute="class" defaultTheme="light">
           <TRPCReactProvider headersPromise={getHeaders()}>
-            {props.children}
+            <Provider>{props.children}</Provider>
           </TRPCReactProvider>
           <Toaster />
         </ThemeProvider>
