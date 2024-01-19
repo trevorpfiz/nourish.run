@@ -26,7 +26,7 @@ const valueFormatter: ValueFormatter = (number) =>
   `${new Intl.NumberFormat("us").format(number)} kcal`;
 
 const MacrosDonut = () => (
-  <div className="w-full">
+  <div className="w-full px-4">
     <DonutChart
       data={macros}
       category="calories"

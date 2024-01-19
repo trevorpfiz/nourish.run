@@ -1,65 +1,66 @@
-import { Check } from "lucide-react";
+import { format } from "date-fns";
+import { Clock } from "lucide-react";
 
 import { cn } from "@nourish/ui";
-import { Button } from "@nourish/ui/button";
+import { Badge } from "@nourish/ui/badge";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
-  CardTitle,
 } from "@nourish/ui/card";
-
-const notifications = [
-  {
-    title: "Your call has been confirmed.",
-    description: "1 hour ago",
-  },
-  {
-    title: "You have a new message!",
-    description: "1 hour ago",
-  },
-  {
-    title: "Your subscription is expiring soon!",
-    description: "2 hours ago",
-  },
-];
 
 type CardProps = React.ComponentProps<typeof Card>;
 
-export function MealCard({ className, ...props }: CardProps) {
+interface MealProps extends CardProps {
+  meal: {
+    time: string;
+    foodItems: string[];
+  };
+}
+
+export function MealCard({ meal, className, ...props }: MealProps) {
+  const { time, foodItems } = meal;
+
+  // Format the time to a more readable format, e.g., "3:17 AM"
+  const formattedTime = format(new Date(time), "p");
+  // Determine the number of food items to display as a badge
+  const additionalItemsCount = foodItems.length > 2 ? foodItems.length - 2 : 0;
+
   return (
-    <Card className={cn("w-[380px]", className)} {...props}>
-      <CardHeader>
-        <CardTitle>Notifications</CardTitle>
-        <CardDescription>You have 3 unread messages.</CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-        <div>
-          {notifications.map((notification, index) => (
-            <div
-              key={index}
-              className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
-            >
-              <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
-              <div className="space-y-1">
-                <p className="text-sm font-medium leading-none">
-                  {notification.title}
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  {notification.description}
-                </p>
-              </div>
-            </div>
-          ))}
+    <Card className={cn("w-36", className)} {...props}>
+      <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 p-2">
+        <CardDescription>Meal</CardDescription>
+        <div className="flex flex-row items-center gap-1">
+          <Clock size={16} className="text-muted-foreground" />
+          <p className="text-sm text-muted-foreground">{formattedTime}</p>
         </div>
+      </CardHeader>
+      <CardContent className="p-2">
+        <ul>
+          {foodItems.slice(0, 2).map(
+            (
+              foodItem,
+              index, // Only take the first two items
+            ) => (
+              <li
+                key={index}
+                className="grid grid-cols-[25px_1fr] items-start pb-2"
+              >
+                <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                <p className="truncate text-sm font-medium leading-none">
+                  {foodItem}
+                </p>
+              </li>
+            ),
+          )}
+          {additionalItemsCount > 0 && ( // Only show this if there are more than two items
+            <li className="pt-2">
+              <Badge variant="default">+{additionalItemsCount} more</Badge>
+            </li>
+          )}
+        </ul>
       </CardContent>
-      <CardFooter>
-        <Button className="w-full">
-          <Check className="mr-2 h-4 w-4" /> Mark all as read
-        </Button>
-      </CardFooter>
     </Card>
   );
 }
