@@ -3,13 +3,11 @@
 import * as React from "react";
 import { atom, useAtom } from "jotai";
 
-import { cn } from "@nourish/ui";
 import { Badge } from "@nourish/ui/badge";
 import { Button } from "@nourish/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
@@ -18,16 +16,14 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@nourish/ui/drawer";
-import { Input } from "@nourish/ui/input";
-import { Label } from "@nourish/ui/label";
 
 import { selectedFoodItemsAtom } from "~/components/track/food-item-card";
+import { ReviewItemsForm } from "~/components/track/review-items-form";
 import { useMediaQuery } from "~/hooks/use-media-query";
 
 export const reviewDrawerOpenAtom = atom(false);
@@ -56,12 +52,9 @@ export function ReviewDrawerDialog() {
         </DialogTrigger>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>Edit profile</DialogTitle>
-            <DialogDescription>
-              Make changes to your profile here. Click save when you're done.
-            </DialogDescription>
+            <DialogTitle>Review selected items</DialogTitle>
           </DialogHeader>
-          <ProfileForm />
+          <ReviewItemsForm />
         </DialogContent>
       </Dialog>
     );
@@ -90,12 +83,9 @@ export function ReviewDrawerDialog() {
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
-          <DrawerTitle>Edit profile</DrawerTitle>
-          <DrawerDescription>
-            Make changes to your profile here. Click save when you're done.
-          </DrawerDescription>
+          <DrawerTitle>Review selected items</DrawerTitle>
         </DrawerHeader>
-        <ProfileForm className="px-4" />
+        <ReviewItemsForm />
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -103,21 +93,5 @@ export function ReviewDrawerDialog() {
         </DrawerFooter>
       </DrawerContent>
     </Drawer>
-  );
-}
-
-function ProfileForm({ className }: React.ComponentProps<"form">) {
-  return (
-    <form className={cn("grid items-start gap-4", className)}>
-      <div className="grid gap-2">
-        <Label htmlFor="email">Email</Label>
-        <Input type="email" id="email" defaultValue="shadcn@example.com" />
-      </div>
-      <div className="grid gap-2">
-        <Label htmlFor="username">Username</Label>
-        <Input id="username" defaultValue="@shadcn" />
-      </div>
-      <Button type="submit">Save changes</Button>
-    </form>
   );
 }

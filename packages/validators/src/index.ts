@@ -1,9 +1,20 @@
 import { z } from "zod";
 
+// track
 export const SearchFoodItemSchema = z.object({
   name: z.string().min(1),
 });
 export type SearchFoodItem = z.infer<typeof SearchFoodItemSchema>;
+
+export const ReviewFoodItemSchema = z.object({
+  size: z.string().min(1),
+  quantity: z.number().min(1),
+});
+export type ReviewFoodItem = z.infer<typeof ReviewFoodItemSchema>;
+export const ReviewFoodsFormSchema = z.object({
+  foods: z.array(ReviewFoodItemSchema),
+});
+export type ReviewFoodsForm = z.infer<typeof ReviewFoodsFormSchema>;
 
 // auth
 export const SignInSchema = z.object({
