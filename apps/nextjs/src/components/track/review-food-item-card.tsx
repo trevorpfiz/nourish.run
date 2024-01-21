@@ -1,52 +1,45 @@
 "use client";
 
-import type { UseFormReturn } from "react-hook-form";
-import { useAtom } from "jotai";
 import { X } from "lucide-react";
 
+import type { UseFormReturn } from "@nourish/ui/form";
 import type { ReviewFoodsForm } from "@nourish/validators";
 import { cn } from "@nourish/ui";
 import { Button } from "@nourish/ui/button";
 import { Card, CardContent, CardFooter } from "@nourish/ui/card";
-import { FormControl, FormField, FormItem, FormLabel } from "@nourish/ui/form";
+import {
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  useFieldArray,
+  useFormContext,
+} from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
-
-import type { FoodItem } from "~/components/track/search-foods";
-import { selectedFoodItemsAtom } from "~/components/track/food-item-card";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface ReviewFoodItemProps extends CardProps {
-  form: UseFormReturn<ReviewFoodsForm>;
-  foodItem: FoodItem;
   index: number;
 }
 
 function ReviewFoodItemCard({
-  form,
-  foodItem,
   index,
   className,
   ...props
 }: ReviewFoodItemProps) {
-  const { id, name, description } = foodItem;
-  const { control, setValue } = form;
+  const form: UseFormReturn<ReviewFoodsForm> = useFormContext();
 
-  const [selectedFoodItems, setSelectedFoodItems] = useAtom(
-    selectedFoodItemsAtom,
-  );
+  const { fields, remove } = useFieldArray({
+    name: "foods",
+    control: form.control,
+  });
 
-  const removeItem = () => {
-    // Remove from the selected items atom
-    setSelectedFoodItems(
-      selectedFoodItems.filter((item) => item.id !== foodItem.id),
-    );
-    // Remove from the form state
-    setValue(
-      "foods",
-      selectedFoodItems.filter((item) => item.id !== foodItem.id),
-    );
-  };
+  const foodItem = fields[index];
+
+  if (!foodItem) return null;
+
+  const removeItem = () => remove(index);
 
   return (
     <Card
@@ -59,10 +52,10 @@ function ReviewFoodItemCard({
             <span className="flex h-2 w-2 flex-shrink-0 translate-y-1 rounded-full bg-sky-500" />
             <div className="flex flex-col gap-1">
               <h3 className="truncate text-sm font-bold leading-none">
-                {name}
+                {foodItem.name}
               </h3>
               <p className="truncate text-sm font-medium leading-none text-muted-foreground">
-                {description}
+                {foodItem.description}
               </p>
             </div>
           </div>
@@ -76,8 +69,8 @@ function ReviewFoodItemCard({
       <CardFooter>
         <FormField
           name={`foods.${index}.size`}
-          control={control}
-          render={({ field, fieldState }) => (
+          control={form.control}
+          render={({ field }) => (
             <FormItem>
               <FormLabel>Size</FormLabel>
               <FormControl>
@@ -89,8 +82,8 @@ function ReviewFoodItemCard({
 
         <FormField
           name={`foods.${index}.quantity`}
-          control={control}
-          render={({ field, fieldState }) => (
+          control={form.control}
+          render={({ field }) => (
             <FormItem>
               <FormLabel>#</FormLabel>
               <FormControl>

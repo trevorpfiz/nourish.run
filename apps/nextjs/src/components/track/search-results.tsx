@@ -18,7 +18,7 @@ export default function SearchResults() {
       </h3>
       <ul>
         {searchResults.map((foodItem) => (
-          <li key={foodItem.id} className="pb-2">
+          <li key={foodItem.foodId} className="pb-2">
             <FoodItemCard foodItem={foodItem} />
           </li>
         ))}

@@ -8,91 +8,91 @@ import { Input } from "@nourish/ui/input";
 import { searchResultsAtom } from "~/components/track/search-results";
 
 export interface FoodItem {
-  id: string;
+  foodId: string;
   name: string;
   description: string;
 }
 
 export const foodItems: FoodItem[] = [
   {
-    id: "1",
+    foodId: "1",
     name: "Apple",
     description:
       "A sweet, crisp fruit that grows on trees. tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt tttttttt",
   },
   {
-    id: "2",
+    foodId: "2",
     name: "Banana",
     description:
       "A sweet fruit that grows on trees. tttttttttttttttttttt ttttttttttttttttt tttttttttttttttttttttt tttttttttttttttttt ttttttttttttttttt",
   },
   {
-    id: "3",
+    foodId: "3",
     name: "Orange",
     description: "A sweet, citrus fruit that grows on trees.",
   },
   {
-    id: "4",
+    foodId: "4",
     name: "Pineapple",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "5",
+    foodId: "5",
     name: "Grape",
     description: "A sweet fruit that grows on vines.",
   },
   {
-    id: "6",
+    foodId: "6",
     name: "Strawberry",
     description: "A sweet fruit that grows on vines.",
   },
   {
-    id: "7",
+    foodId: "7",
     name: "Blueberry",
     description: "A sweet fruit that grows on vines.",
   },
   {
-    id: "8",
+    foodId: "8",
     name: "Raspberry",
     description: "A sweet fruit that grows on vines.",
   },
   {
-    id: "9",
+    foodId: "9",
     name: "Blackberry",
     description: "A sweet fruit that grows on vines.",
   },
   {
-    id: "10",
+    foodId: "10",
     name: "Mango",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "11",
+    foodId: "11",
     name: "Papaya",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "12",
+    foodId: "12",
     name: "Kiwi",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "13",
+    foodId: "13",
     name: "Watermelon",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "14",
+    foodId: "14",
     name: "Cantaloupe",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "15",
+    foodId: "15",
     name: "Honeydew",
     description: "A sweet, tropical fruit that grows on trees.",
   },
   {
-    id: "16",
+    foodId: "16",
     name: "Lemon",
     description: "A sour, citrus fruit that grows on trees.",
   },

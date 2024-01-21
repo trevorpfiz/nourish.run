@@ -1,11 +1,13 @@
 "use client";
 
-import { atom, useAtom } from "jotai";
 import { Check } from "lucide-react";
 
+import type { UseFormReturn } from "@nourish/ui/form";
+import type { ReviewFoodsForm } from "@nourish/validators";
 import { cn } from "@nourish/ui";
 import { Badge } from "@nourish/ui/badge";
 import { Card, CardContent } from "@nourish/ui/card";
+import { useFieldArray, useFormContext } from "@nourish/ui/form";
 
 import type { FoodItem } from "~/components/track/search-foods";
 
@@ -15,23 +17,34 @@ interface FoodItemProps extends CardProps {
   foodItem: FoodItem;
 }
 
-export const selectedFoodItemsAtom = atom<FoodItem[]>([]);
-
 export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
-  const { id, name, description } = foodItem;
-  const [selectedFoodItems, setSelectedFoodItems] = useAtom(
-    selectedFoodItemsAtom,
-  );
+  const { foodId, name, description } = foodItem;
+
+  const form: UseFormReturn<ReviewFoodsForm> = useFormContext();
+
+  const { fields, append, remove } = useFieldArray({
+    name: "foods",
+    control: form.control,
+  });
+
+  const isSelected = fields.some((field) => field.id === foodId);
 
   const toggleSelection = () => {
-    if (selectedFoodItems.some((item) => item.id === id)) {
-      setSelectedFoodItems(selectedFoodItems.filter((item) => item.id !== id));
+    if (isSelected) {
+      // Find the index of the item with the same id and remove it
+      const selectedIndex = fields.findIndex((field) => field.id === foodId);
+      remove(selectedIndex);
     } else {
-      setSelectedFoodItems([...selectedFoodItems, foodItem]);
+      // Append the new item to the form state
+      append({
+        foodId,
+        name: foodItem.name,
+        description: foodItem.description,
+        size: "",
+        quantity: 1,
+      });
     }
   };
-
-  const isSelected = selectedFoodItems.some((item) => item.id === id);
 
   return (
     <Card

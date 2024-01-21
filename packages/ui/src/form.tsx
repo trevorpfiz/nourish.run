@@ -199,4 +199,5 @@ export {
   FormField,
 };
 
-export { useFieldArray } from "react-hook-form";
+export { useFieldArray, useFormContext } from "react-hook-form";
+export type { UseFormReturn } from "react-hook-form";
