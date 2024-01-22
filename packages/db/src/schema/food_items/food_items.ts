@@ -1,7 +1,7 @@
 import { relations } from "drizzle-orm";
 import {
+  bigint,
   decimal,
-  mysqlEnum,
   primaryKey,
   serial,
   text,
@@ -14,10 +14,8 @@ import { mySqlTable } from "../_table";
 
 export const foodItems = mySqlTable("food_item", {
   id: serial("id").primaryKey(),
-  name: varchar("name", { length: 100 }),
-  description: text("description"),
+  name: varchar("name", { length: 255 }),
   food_category: varchar("food_category", { length: 50 }),
-  brand: varchar("brand", { length: 100 }),
   serving_sizes: text("serving_sizes"),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").onUpdateNow(),
@@ -31,8 +29,14 @@ export const foodItemsRelations = relations(foodItems, ({ many }) => ({
 export const foodItemsToNutrients = mySqlTable(
   "food_items_to_nutrients",
   {
-    food_item_id: varchar("food_item_id", { length: 191 }).notNull(),
-    nutrient_id: varchar("nutrient_id", { length: 191 }).notNull(),
+    food_item_id: bigint("food_item_id", {
+      mode: "bigint",
+      unsigned: true,
+    }).notNull(),
+    nutrient_id: bigint("nutrient_id", {
+      mode: "bigint",
+      unsigned: true,
+    }).notNull(),
     quantity_per_100g: decimal("quantity_per_100g", {
       precision: 10,
       scale: 4,

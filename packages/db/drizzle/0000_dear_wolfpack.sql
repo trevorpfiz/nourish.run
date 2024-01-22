@@ -55,23 +55,17 @@ CREATE TABLE `nourish_verificationToken` (
 --> statement-breakpoint
 CREATE TABLE `nourish_food_item` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`name` varchar(100),
-	`description` text,
-	`food_group` varchar(50),
-	`brand` varchar(100),
+	`name` varchar(255),
+	`food_category` varchar(50),
 	`serving_sizes` text,
-	`ingredients` text,
-	`type` enum('food','drink','supplement'),
-	`packaging_size` varchar(100),
-	`price` decimal(6,2),
 	`createdAt` timestamp DEFAULT (now()),
 	`updatedAt` timestamp ON UPDATE CURRENT_TIMESTAMP,
 	CONSTRAINT `nourish_food_item_id` PRIMARY KEY(`id`)
 );
 --> statement-breakpoint
 CREATE TABLE `nourish_food_items_to_nutrients` (
-	`food_item_id` varchar(191) NOT NULL,
-	`nutrient_id` varchar(191) NOT NULL,
+	`food_item_id` bigint unsigned NOT NULL,
+	`nutrient_id` bigint unsigned NOT NULL,
 	`quantity_per_100g` decimal(10,4),
 	`createdAt` timestamp DEFAULT (now()),
 	`updatedAt` timestamp ON UPDATE CURRENT_TIMESTAMP,
@@ -80,11 +74,10 @@ CREATE TABLE `nourish_food_items_to_nutrients` (
 --> statement-breakpoint
 CREATE TABLE `nourish_nutrition` (
 	`id` serial AUTO_INCREMENT NOT NULL,
-	`user_id` varchar(191) NOT NULL,
-	`food_item_id` varchar(191) NOT NULL,
+	`user_id` varchar(255) NOT NULL,
+	`food_item_id` bigint unsigned NOT NULL,
 	`serving_size` varchar(100),
 	`servings` decimal(8,3),
-	`quality` varchar(50),
 	`time` timestamp,
 	`createdAt` timestamp DEFAULT (now()),
 	`updatedAt` timestamp ON UPDATE CURRENT_TIMESTAMP,

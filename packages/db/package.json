@@ -13,6 +13,8 @@
     "lint": "eslint .",
     "push": "drizzle-kit push:mysql",
     "studio": "drizzle-kit studio",
+    "migration": "drizzle-kit generate:mysql",
+    "dbml": "sql2dbml --mysql ./drizzle/0000_dear_wolfpack.sql -o ./dbml/nourish-new.dbml",
     "typecheck": "tsc --noEmit",
     "dump": "pscale db dump nourish dev --output nourish_dump",
     "combine:sql": "cat *.sql > combined.sql"
