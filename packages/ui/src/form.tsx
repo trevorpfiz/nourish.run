@@ -5,9 +5,12 @@ import type {
   ControllerProps,
   FieldPath,
   FieldValues,
+  UseFieldArrayReturn,
   UseFormProps,
+  UseFormReturn,
 } from "react-hook-form";
 import type { ZodType } from "zod";
+import { createContext, useContext } from "react";
 import * as React from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Slot } from "@radix-ui/react-slot";
@@ -201,3 +204,40 @@ export {
 
 export { useFieldArray, useFormContext } from "react-hook-form";
 export type { UseFormReturn } from "react-hook-form";
+
+// --- custom provider and context that includes useFieldArray ---
+
+// Combined type for useForm and useFieldArray methods
+type AllFormMethods<TFieldValues extends FieldValues = FieldValues> =
+  UseFormReturn<TFieldValues> & UseFieldArrayReturn<TFieldValues>;
+
+const FieldArrayFormContext = createContext<AllFormMethods | null>(null);
+
+FieldArrayFormContext.displayName = "RHFArrayContext";
+
+export const useFieldArrayFormContext = <
+  TFieldValues extends FieldValues,
+>(): AllFormMethods<TFieldValues> => {
+  return useContext(
+    FieldArrayFormContext,
+  ) as unknown as AllFormMethods<TFieldValues>;
+};
+
+export declare type FieldArrayFormProviderProps<
+  TFieldValues extends FieldValues = FieldValues,
+> = {
+  children: React.ReactNode;
+} & AllFormMethods<TFieldValues>;
+
+export const FieldArrayForm = <TFieldValues extends FieldValues>({
+  children,
+  ...props
+}: FieldArrayFormProviderProps<TFieldValues>) => {
+  return (
+    <FieldArrayFormContext.Provider
+      value={{ ...props } as unknown as AllFormMethods}
+    >
+      {children}
+    </FieldArrayFormContext.Provider>
+  );
+};

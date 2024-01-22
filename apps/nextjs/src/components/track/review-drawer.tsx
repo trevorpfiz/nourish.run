@@ -3,7 +3,6 @@
 import * as React from "react";
 import { atom, useAtom } from "jotai";
 
-import type { UseFormReturn } from "@nourish/ui/form";
 import type { ReviewFoodsForm } from "@nourish/validators";
 import { Badge } from "@nourish/ui/badge";
 import { Button } from "@nourish/ui/button";
@@ -23,7 +22,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@nourish/ui/drawer";
-import { useFieldArray, useFormContext } from "@nourish/ui/form";
+import { useFieldArrayFormContext } from "@nourish/ui/form";
 
 import { ReviewItemsForm } from "~/components/track/review-items-form";
 import { useMediaQuery } from "~/hooks/use-media-query";
@@ -34,12 +33,7 @@ export function ReviewDrawerDialog() {
   const [reviewDrawerOpen, setReviewDrawerOpen] = useAtom(reviewDrawerOpenAtom);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
-  const form: UseFormReturn<ReviewFoodsForm> = useFormContext();
-
-  const { fields } = useFieldArray({
-    name: "foods",
-    control: form.control,
-  });
+  const form = useFieldArrayFormContext<ReviewFoodsForm>();
 
   if (isDesktop) {
     return (
@@ -48,13 +42,13 @@ export function ReviewDrawerDialog() {
           <Button
             variant="primary"
             size="lg"
-            disabled={fields.length <= 0}
+            disabled={form.fields.length <= 0}
             className="w-full rounded-full"
             onClick={() => setReviewDrawerOpen(true)}
           >
             Review{" "}
             <Badge variant="secondary" className="ml-2">
-              {fields.length}
+              {form.fields.length}
             </Badge>
           </Button>
         </DialogTrigger>
@@ -79,13 +73,13 @@ export function ReviewDrawerDialog() {
         <Button
           variant="primary"
           size="lg"
-          disabled={fields.length <= 0}
+          disabled={form.fields.length <= 0}
           className="w-full rounded-full"
           onClick={() => setReviewDrawerOpen(true)}
         >
           Review{" "}
           <Badge variant="secondary" className="ml-2">
-            {fields.length}
+            {form.fields.length}
           </Badge>
         </Button>
       </DrawerTrigger>

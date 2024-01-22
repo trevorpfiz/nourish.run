@@ -2,7 +2,6 @@
 
 import { X } from "lucide-react";
 
-import type { UseFormReturn } from "@nourish/ui/form";
 import type { ReviewFoodsForm } from "@nourish/validators";
 import { cn } from "@nourish/ui";
 import { Button } from "@nourish/ui/button";
@@ -12,8 +11,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  useFieldArray,
-  useFormContext,
+  useFieldArrayFormContext,
 } from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
 
@@ -28,18 +26,13 @@ function ReviewFoodItemCard({
   className,
   ...props
 }: ReviewFoodItemProps) {
-  const form: UseFormReturn<ReviewFoodsForm> = useFormContext();
+  const form = useFieldArrayFormContext<ReviewFoodsForm>();
 
-  const { fields, remove } = useFieldArray({
-    name: "foods",
-    control: form.control,
-  });
-
-  const foodItem = fields[index];
+  const foodItem = form.fields[index];
 
   if (!foodItem) return null;
 
-  const removeItem = () => remove(index);
+  const removeItem = () => form.remove(index);
 
   return (
     <Card

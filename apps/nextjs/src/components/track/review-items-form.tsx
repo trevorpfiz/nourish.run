@@ -1,6 +1,5 @@
 "use client";
 
-import type { UseFormReturn } from "@nourish/ui/form";
 import type { ReviewFoodsForm } from "@nourish/validators";
 import { Badge } from "@nourish/ui/badge";
 import { Button } from "@nourish/ui/button";
@@ -8,19 +7,13 @@ import {
   FormField,
   FormItem,
   FormMessage,
-  useFieldArray,
-  useFormContext,
+  useFieldArrayFormContext,
 } from "@nourish/ui/form";
 
 import { ReviewFoodItemCard } from "~/components/track/review-food-item-card";
 
 function ReviewItemsForm() {
-  const form: UseFormReturn<ReviewFoodsForm> = useFormContext();
-
-  const { fields } = useFieldArray({
-    name: "foods",
-    control: form.control,
-  });
+  const form = useFieldArrayFormContext<ReviewFoodsForm>();
 
   function onSubmit(data: ReviewFoodsForm) {
     // Handle form submission
@@ -33,7 +26,7 @@ function ReviewItemsForm() {
         name="foods"
         render={({ field }) => (
           <FormItem>
-            {fields.map((field, index) => (
+            {form.fields.map((field, index) => (
               <ReviewFoodItemCard key={field.id} index={index} />
             ))}
             <FormMessage />
@@ -49,7 +42,7 @@ function ReviewItemsForm() {
       >
         Review{" "}
         <Badge variant="secondary" className="ml-2">
-          {fields.length}
+          {form.fields.length}
         </Badge>
       </Button>
     </form>

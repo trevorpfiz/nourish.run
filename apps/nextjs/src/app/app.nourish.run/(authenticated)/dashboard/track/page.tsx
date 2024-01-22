@@ -1,22 +1,11 @@
-import { Form, useForm } from "@nourish/ui/form";
-import { ReviewFoodsFormSchema } from "@nourish/validators";
-
 import { ModalTopBar } from "~/components/track/modal-top-bar";
-import { ReviewDrawerDialog } from "~/components/track/review-drawer";
+import { PageContent } from "~/components/track/page-content";
 import SearchFoods from "~/components/track/search-foods";
-import SearchResults from "~/components/track/search-results";
 
 export const runtime = "edge";
 
-// FIXME: idk if I can use min-h-screen here
+// TODO: keep an eye on h-dvh
 export default async function TrackPage() {
-  const form = useForm({
-    schema: ReviewFoodsFormSchema,
-    defaultValues: {
-      foods: [],
-    },
-  });
-
   return (
     <div className="relative z-0 flex h-full w-full overflow-hidden">
       <div
@@ -29,23 +18,8 @@ export default async function TrackPage() {
         {/* Search bar */}
         <SearchFoods />
 
-        <Form {...form}>
-          {/* Content */}
-          <main className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto overflow-x-hidden px-4 pb-12 pt-4">
-            {/* Search results */}
-            <SearchResults />
-          </main>
-
-          {/* Review button */}
-          {/* <ReviewButton /> */}
-
-          {/* Review button and drawer / dialog */}
-          {/* <ReviewDrawerDialog /> */}
-
-          <div className="flex-shrink-0 px-4">
-            <ReviewDrawerDialog />
-          </div>
-        </Form>
+        {/* Content and Review drawer */}
+        <PageContent />
       </div>
     </div>
   );
