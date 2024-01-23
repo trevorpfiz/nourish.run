@@ -205,8 +205,8 @@ export {
 export { useFieldArray, useFormContext } from "react-hook-form";
 export type { UseFormReturn } from "react-hook-form";
 
+// @link https://github.com/orgs/react-hook-form/discussions/3942
 // --- custom provider and context that includes useFieldArray ---
-
 // Combined type for useForm and useFieldArray methods
 type AllFormMethods<TFieldValues extends FieldValues = FieldValues> =
   UseFormReturn<TFieldValues> & UseFieldArrayReturn<TFieldValues>;

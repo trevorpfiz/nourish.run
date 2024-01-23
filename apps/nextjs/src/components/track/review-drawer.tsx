@@ -88,10 +88,10 @@ export function ReviewDrawerDialog() {
           <DrawerTitle>Review selected items</DrawerTitle>
         </DrawerHeader>
         <ReviewItemsForm />
-        <DrawerFooter className="pt-2">
-          <DrawerClose asChild>
+        <DrawerFooter className="pt-0">
+          {/* <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
-          </DrawerClose>
+          </DrawerClose> */}
         </DrawerFooter>
       </DrawerContent>
     </Drawer>

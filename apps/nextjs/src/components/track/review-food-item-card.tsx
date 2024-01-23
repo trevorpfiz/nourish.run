@@ -14,6 +14,13 @@ import {
   useFieldArrayFormContext,
 } from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@nourish/ui/select";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -36,11 +43,14 @@ function ReviewFoodItemCard({
 
   return (
     <Card
-      className={cn("flex w-full items-center justify-between", className)}
+      className={cn(
+        "flex w-full flex-col items-center justify-between",
+        className,
+      )}
       {...props}
     >
-      <CardContent className="flex-grow p-4">
-        <div className="flex flex-row items-center justify-between gap-1">
+      <CardContent className="w-full p-4">
+        <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-row items-center gap-2">
             <span className="flex h-2 w-2 flex-shrink-0 translate-y-1 rounded-full bg-sky-500" />
             <div className="flex flex-col gap-1">
@@ -59,16 +69,25 @@ function ReviewFoodItemCard({
           </div>
         </div>
       </CardContent>
-      <CardFooter>
+      <CardFooter className="flex w-full flex-row items-center gap-2">
         <FormField
           name={`foods.${index}.size`}
           control={form.control}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>Size</FormLabel>
-              <FormControl>
-                <Input {...field} placeholder="Size" />
-              </FormControl>
+            <FormItem className="flex flex-[2] flex-row items-center gap-2 space-y-0">
+              <FormLabel className="flex-shrink-0">Size</FormLabel>
+              <Select onValueChange={field.onChange} defaultValue={field.value}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Size" />
+                  </SelectTrigger>
+                </FormControl>
+                <SelectContent>
+                  <SelectItem value="1 cup">{`1 cup (147g)`}</SelectItem>
+                  <SelectItem value="2 cup">{`2 cup (294g)`}</SelectItem>
+                  <SelectItem value="3 cup">{`3 cup (441g)`}</SelectItem>
+                </SelectContent>
+              </Select>
             </FormItem>
           )}
         />
@@ -77,8 +96,8 @@ function ReviewFoodItemCard({
           name={`foods.${index}.quantity`}
           control={form.control}
           render={({ field }) => (
-            <FormItem>
-              <FormLabel>#</FormLabel>
+            <FormItem className="flex flex-1 flex-row items-center gap-2 space-y-0">
+              <FormLabel className="flex-shrink-0">#</FormLabel>
               <FormControl>
                 <Input {...field} type="number" placeholder="Quantity" />
               </FormControl>
