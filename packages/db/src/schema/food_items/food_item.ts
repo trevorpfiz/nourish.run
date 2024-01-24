@@ -2,26 +2,39 @@ import { relations } from "drizzle-orm";
 import {
   bigint,
   decimal,
+  index,
   primaryKey,
   serial,
   text,
   timestamp,
+  tinyint,
   varchar,
 } from "drizzle-orm/mysql-core";
 
-import { nutrients, nutrition } from "..";
+import { nutrient, nutrition } from "..";
 import { mySqlTable } from "../_table";
 
-export const foodItems = mySqlTable("food_item", {
-  id: serial("id").primaryKey(),
-  name: varchar("name", { length: 255 }),
-  food_category: varchar("food_category", { length: 50 }),
-  serving_sizes: text("serving_sizes"),
-  createdAt: timestamp("createdAt").defaultNow(),
-  updatedAt: timestamp("updatedAt").onUpdateNow(),
-});
+export const foodItem = mySqlTable(
+  "food_item",
+  {
+    id: serial("id").primaryKey(),
+    name: varchar("name", { length: 255 }),
+    food_category: varchar("food_category", { length: 50 }),
+    serving_sizes: text("serving_sizes"),
+    calories_per_100g: decimal("calories_per_100g", {
+      precision: 10,
+      scale: 4,
+    }),
+    icon_color: tinyint("icon_color", { unsigned: true }),
+    createdAt: timestamp("createdAt").defaultNow(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (foodItem) => ({
+    nameIdx: index("name_idx").on(foodItem.name),
+  }),
+);
 
-export const foodItemsRelations = relations(foodItems, ({ many }) => ({
+export const foodItemsRelations = relations(foodItem, ({ many }) => ({
   nutrition: many(nutrition),
   foodItemsToNutrients: many(foodItemsToNutrients),
 }));
@@ -54,13 +67,13 @@ export const foodItemsToNutrients = mySqlTable(
 export const foodItemsToNutrientsRelations = relations(
   foodItemsToNutrients,
   ({ one }) => ({
-    foodItem: one(foodItems, {
+    foodItem: one(foodItem, {
       fields: [foodItemsToNutrients.food_item_id],
-      references: [foodItems.id],
+      references: [foodItem.id],
     }),
-    nutrient: one(nutrients, {
+    nutrient: one(nutrient, {
       fields: [foodItemsToNutrients.nutrient_id],
-      references: [nutrients.id],
+      references: [nutrient.id],
     }),
   }),
 );

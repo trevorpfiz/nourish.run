@@ -1,11 +1,12 @@
 "use client";
 
-import type { AppRouter } from "@nourish/api";
 import { useState } from "react";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { loggerLink, unstable_httpBatchStreamLink } from "@trpc/client";
 import { createTRPCReact } from "@trpc/react-query";
 import SuperJSON from "superjson";
+
+import type { AppRouter } from "@nourish/api";
 
 export const api = createTRPCReact<AppRouter>();
 
@@ -13,7 +14,16 @@ export function TRPCReactProvider(props: {
   children: React.ReactNode;
   headersPromise: Promise<Headers>;
 }) {
-  const [queryClient] = useState(() => new QueryClient());
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: {
+          queries: {
+            refetchOnWindowFocus: false,
+          },
+        },
+      }),
+  );
 
   const [trpcClient] = useState(() =>
     api.createClient({

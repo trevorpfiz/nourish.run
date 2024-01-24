@@ -4,7 +4,7 @@ import { decimal, serial, timestamp, varchar } from "drizzle-orm/mysql-core";
 import { foodItemsToNutrients } from "..";
 import { mySqlTable } from "../_table";
 
-export const nutrients = mySqlTable("nutrient", {
+export const nutrient = mySqlTable("nutrient", {
   id: serial("id").primaryKey(),
   category: varchar("category", { length: 100 }),
   class: varchar("class", { length: 100 }),
@@ -16,6 +16,6 @@ export const nutrients = mySqlTable("nutrient", {
   updatedAt: timestamp("updatedAt").onUpdateNow(),
 });
 
-export const nutrientsRelations = relations(nutrients, ({ many }) => ({
+export const nutrientRelations = relations(nutrient, ({ many }) => ({
   foodItemsToNutrients: many(foodItemsToNutrients),
 }));

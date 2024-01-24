@@ -7,7 +7,7 @@ import {
   varchar,
 } from "drizzle-orm/mysql-core";
 
-import { foodItems } from "..";
+import { foodItem, meal } from "..";
 import { mySqlTable } from "../_table";
 import { users } from "../auth";
 
@@ -15,6 +15,10 @@ export const nutrition = mySqlTable("nutrition", {
   id: serial("id").primaryKey(),
   user_id: varchar("user_id", { length: 255 }).notNull(),
   food_item_id: bigint("food_item_id", {
+    mode: "bigint",
+    unsigned: true,
+  }).notNull(),
+  meal_id: bigint("meal_id", {
     mode: "bigint",
     unsigned: true,
   }).notNull(),
@@ -30,8 +34,12 @@ export const nutritionRelations = relations(nutrition, ({ one }) => ({
     fields: [nutrition.user_id],
     references: [users.id],
   }),
-  foodItem: one(foodItems, {
+  foodItem: one(foodItem, {
     fields: [nutrition.food_item_id],
-    references: [foodItems.id],
+    references: [foodItem.id],
+  }),
+  meal: one(meal, {
+    fields: [nutrition.meal_id],
+    references: [meal.id],
   }),
 }));

@@ -45,7 +45,7 @@ export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
   return (
     <Card
       className={cn(
-        "flex w-full cursor-pointer items-center justify-between hover:opacity-75",
+        "flex w-full cursor-pointer items-center justify-between hover:opacity-60",
         className,
       )}
       onClick={toggleSelection}

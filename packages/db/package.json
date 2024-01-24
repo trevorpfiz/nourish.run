@@ -4,7 +4,8 @@
   "private": true,
   "type": "module",
   "exports": {
-    ".": "./src/index.ts"
+    ".": "./src/index.ts",
+    "./src/schema": "./src/schema/index.ts"
   },
   "license": "MIT",
   "scripts": {
@@ -20,7 +21,7 @@
     "combine:sql": "cat *.sql > combined.sql"
   },
   "dependencies": {
-    "@planetscale/database": "^1.13.0",
+    "@planetscale/database": "^1.14.0",
     "drizzle-orm": "^0.29.3",
     "drizzle-zod": "^0.5.1"
   },
@@ -29,9 +30,9 @@
     "@nourish/prettier-config": "workspace:^0.1.0",
     "@nourish/tsconfig": "workspace:^0.1.0",
     "dotenv-cli": "^7.3.0",
-    "drizzle-kit": "^0.20.10",
+    "drizzle-kit": "^0.20.13",
     "eslint": "^8.56.0",
-    "mysql2": "^3.7.0",
+    "mysql2": "^3.8.0",
     "prettier": "^3.1.1",
     "typescript": "^5.3.3"
   },
