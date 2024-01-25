@@ -252,7 +252,9 @@ export const idToOrderMap = {
   1101: 2, // Manganese
 };
 
-export const idToOrderHierarchyMap = {
+type IdToOrderHierarchyMap = Record<number, string>;
+
+export const idToOrderHierarchyMap: IdToOrderHierarchyMap = {
   // General
   1008: "1", // Energy
   1051: "2", // Water
