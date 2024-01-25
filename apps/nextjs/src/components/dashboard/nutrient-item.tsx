@@ -1,3 +1,4 @@
+import type { ProgressBarProps } from "@tremor/react";
 import { Flex, ProgressBar, Text } from "@tremor/react";
 
 import { cn } from "@nourish/ui";
@@ -7,15 +8,19 @@ interface NutrientItemProps {
   currentValue?: number;
   dailyValue?: string;
   unit: string;
+  color?: ProgressBarProps["color"];
   className?: string;
 }
 
 const NutrientItem = (props: NutrientItemProps) => {
-  const { name, currentValue = 10, dailyValue, unit } = props;
+  const { name, currentValue = 10, dailyValue, unit, color } = props;
   // Calculate the percentage of the daily value consumed
   const percentage = dailyValue
     ? (currentValue / parseFloat(dailyValue)) * 100
     : 0;
+
+  // Determine the progress bar color
+  const progressBarColor = color ?? (percentage >= 100 ? "emerald" : "gray");
 
   return (
     <div className="flex w-full flex-col items-center gap-2">
@@ -27,7 +32,7 @@ const NutrientItem = (props: NutrientItemProps) => {
       </Flex>
       <ProgressBar
         value={percentage}
-        color={percentage > 100 ? "red" : "gray"}
+        color={progressBarColor}
         className={cn("w-full", props.className)}
       />
     </div>

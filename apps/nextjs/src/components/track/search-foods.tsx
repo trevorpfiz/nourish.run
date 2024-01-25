@@ -1,111 +1,29 @@
 "use client";
 
-import { useAtom } from "jotai";
+import { use } from "react";
+import { atom, useAtom } from "jotai";
 import { Search } from "lucide-react";
+import { matchSorter } from "match-sorter";
 
+import type { RouterOutputs } from "@nourish/api";
+import type { FoodItem } from "@nourish/db/src/schema";
 import { Input } from "@nourish/ui/input";
 
-import { searchResultsAtom } from "~/components/track/search-results";
-
-export interface FoodItem {
-  foodId: string;
-  name: string;
-  description: string;
+interface SearchFoodsProps {
+  foodItems: Promise<RouterOutputs["foodItem"]["all"]>;
 }
 
-export const foodItems: FoodItem[] = [
-  {
-    foodId: "1",
-    name: "Apple",
-    description:
-      "A sweet, crisp fruit that grows on trees. tttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttttt tttttttt",
-  },
-  {
-    foodId: "2",
-    name: "Banana",
-    description:
-      "A sweet fruit that grows on trees. tttttttttttttttttttt ttttttttttttttttt tttttttttttttttttttttt tttttttttttttttttt ttttttttttttttttt",
-  },
-  {
-    foodId: "3",
-    name: "Orange",
-    description: "A sweet, citrus fruit that grows on trees.",
-  },
-  {
-    foodId: "4",
-    name: "Pineapple",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "5",
-    name: "Grape",
-    description: "A sweet fruit that grows on vines.",
-  },
-  {
-    foodId: "6",
-    name: "Strawberry",
-    description: "A sweet fruit that grows on vines.",
-  },
-  {
-    foodId: "7",
-    name: "Blueberry",
-    description: "A sweet fruit that grows on vines.",
-  },
-  {
-    foodId: "8",
-    name: "Raspberry",
-    description: "A sweet fruit that grows on vines.",
-  },
-  {
-    foodId: "9",
-    name: "Blackberry",
-    description: "A sweet fruit that grows on vines.",
-  },
-  {
-    foodId: "10",
-    name: "Mango",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "11",
-    name: "Papaya",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "12",
-    name: "Kiwi",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "13",
-    name: "Watermelon",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "14",
-    name: "Cantaloupe",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "15",
-    name: "Honeydew",
-    description: "A sweet, tropical fruit that grows on trees.",
-  },
-  {
-    foodId: "16",
-    name: "Lemon",
-    description: "A sour, citrus fruit that grows on trees.",
-  },
-];
+export const searchResultsAtom = atom<FoodItem[]>([]);
 
-export default function SearchFoods() {
+export default function SearchFoods(props: SearchFoodsProps) {
+  const { foodItems } = props;
+  const initialData = use(foodItems);
   const [, setSearchResults] = useAtom(searchResultsAtom);
 
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const query = event.target.value.toLowerCase();
-    const matchedItems = foodItems.filter((item) =>
-      item.name.toLowerCase().includes(query),
-    );
+    const query = event.target.value;
+    const matchedItems = matchSorter(initialData, query, { keys: ["name"] });
+    console.log({ matchedItems });
     setSearchResults(matchedItems);
   };
 

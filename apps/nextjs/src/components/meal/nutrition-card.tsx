@@ -38,15 +38,15 @@ function NutritionCard({ index, className, ...props }: NutritionCardProps) {
     selectedMealItemsAtom,
   );
   const foodItem = /* retrieve food item details based on index or some identifier */;
-  const isSelected = selectedMealItems.some(item => item.foodId === foodItem.foodId);
+  const isSelected = selectedMealItems.some(item => item.id === foodItem.id);
 
   const toggleSelection = () => {
     if (isSelected) {
-      const newSelection = selectedMealItems.filter(item => item.foodId !== foodItem.foodId);
+      const newSelection = selectedMealItems.filter(item => item.id !== foodItem.id);
       setSelectedMealItems(newSelection);
     } else {
       setSelectedMealItems([...selectedMealItems, {
-        foodId: foodItem.foodId,
+        id: foodItem.id,
         name: foodItem.name,
         description: foodItem.description,
         size: "", // default size
@@ -58,7 +58,7 @@ function NutritionCard({ index, className, ...props }: NutritionCardProps) {
   // Function to handle size change
   const handleSizeChange = (size) => {
     const updatedItems = selectedMealItems.map(item => 
-      item.foodId === foodItem.foodId ? { ...item, size: size } : item
+      item.id === foodItem.id ? { ...item, size: size } : item
     );
     setSelectedMealItems(updatedItems);
   };
@@ -66,7 +66,7 @@ function NutritionCard({ index, className, ...props }: NutritionCardProps) {
   // Function to handle quantity change
   const handleQuantityChange = (e) => {
     const updatedItems = selectedMealItems.map(item => 
-      item.foodId === foodItem.foodId ? { ...item, quantity: e.target.value } : item
+      item.id === foodItem.id ? { ...item, quantity: e.target.value } : item
     );
     setSelectedMealItems(updatedItems);
   };

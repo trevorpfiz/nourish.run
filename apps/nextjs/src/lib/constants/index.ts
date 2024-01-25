@@ -384,3 +384,19 @@ export const subheadingOrderMap = {
   "Important for Regular Intake - Moderate Priority": 2,
   "Flexible Intake - Lower Priority": 3,
 };
+
+type IconColorMap = Record<number, string>;
+
+export const iconColorMap: IconColorMap = {
+  0: "bg-gray-400", // No Dominance
+  1: "bg-green-500", // Green
+  2: "bg-purple-500", // Purple
+  3: "bg-orange-500", // Orange
+  4: "bg-gradient-to-r from-green-500 to-purple-500", // Green-Purple
+  5: "bg-gradient-to-r from-green-500 to-orange-500", // Green-Orange
+  6: "bg-gradient-to-r from-purple-500 to-green-500", // Purple-Green
+  7: "bg-gradient-to-r from-purple-500 to-orange-500", // Purple-Orange
+  8: "bg-gradient-to-r from-orange-500 to-green-500", // Orange-Green
+  9: "bg-gradient-to-r from-orange-500 to-purple-500", // Orange-Purple
+  10: "bg-gradient-to-br from-green-500 via-purple-500 to-orange-500", // 3-Color
+};

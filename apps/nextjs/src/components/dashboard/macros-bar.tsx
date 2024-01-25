@@ -107,7 +107,7 @@ const MacrosBar = () => {
   const chartData = prepareChartData();
 
   return (
-    <div className="w-full px-4">
+    <div className="w-full px-3">
       <BarChart
         className="h-40"
         data={chartData}

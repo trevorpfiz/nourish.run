@@ -22,8 +22,14 @@ const macros = [
   },
 ];
 
-const valueFormatter: ValueFormatter = (number) =>
-  `${new Intl.NumberFormat("us").format(number)} kcal`;
+// Find the remaining calories
+const remainingCalories =
+  macros.find((macro) => macro.name === "Remaining")?.calories ?? 0;
+
+const valueFormatter: ValueFormatter = (number) => {
+  const consumedCalories = number - remainingCalories;
+  return `${new Intl.NumberFormat("us").format(consumedCalories)} kcal`;
+};
 
 const MacrosDonut = () => (
   <div className="w-full px-4">

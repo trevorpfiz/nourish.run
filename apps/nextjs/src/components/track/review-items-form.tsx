@@ -92,7 +92,7 @@ function ReviewItemsForm() {
           type="submit"
           variant="primary"
           size="lg"
-          className="w-full rounded-full"
+          className="w-full rounded-full uppercase"
         >
           Add{" "}
           <Badge variant="secondary" className="ml-2">

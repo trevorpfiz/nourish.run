@@ -1,4 +1,3 @@
-import { AuthShowcase } from "~/app/_components/auth-showcase";
 import { MacrosBar } from "~/components/dashboard/macros-bar";
 import { MacrosDonut } from "~/components/dashboard/macros-donut";
 import { MacrosProgress } from "~/components/dashboard/macros-progress";
@@ -17,7 +16,7 @@ export default async function DashboardPage() {
         <TopNavbar />
 
         {/* Content */}
-        <main className="relative flex h-full w-full flex-1 flex-col items-center gap-2 overflow-y-auto overflow-x-hidden">
+        <main className="relative flex h-full w-full flex-1 flex-col items-center gap-2 overflow-y-auto overflow-x-hidden pb-32">
           {/* Macros donut chart */}
           <MacrosDonut />
           {/* Macros progress charts  */}
@@ -28,9 +27,6 @@ export default async function DashboardPage() {
           <MealCards />
           {/* Nutrient progress charts */}
           <NutrientsProgress />
-
-          {/* TODO - remove */}
-          <AuthShowcase />
         </main>
 
         {/* Tabs */}

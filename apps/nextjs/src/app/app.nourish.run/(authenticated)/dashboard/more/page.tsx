@@ -3,7 +3,7 @@ import { Button } from "@nourish/ui/button";
 
 export const runtime = "edge";
 
-export default async function SettingsPage() {
+export default async function MorePage() {
   const session = await auth();
 
   return (

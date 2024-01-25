@@ -43,7 +43,7 @@ export function ReviewDrawerDialog() {
             variant="primary"
             size="lg"
             disabled={form.fields.length <= 0}
-            className="w-full rounded-full"
+            className="w-full rounded-full uppercase"
             onClick={() => setReviewDrawerOpen(true)}
           >
             Review{" "}
@@ -74,7 +74,7 @@ export function ReviewDrawerDialog() {
           variant="primary"
           size="lg"
           disabled={form.fields.length <= 0}
-          className="w-full rounded-full"
+          className="w-full rounded-full uppercase"
           onClick={() => setReviewDrawerOpen(true)}
         >
           Review{" "}
