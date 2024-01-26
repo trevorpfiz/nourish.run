@@ -22,6 +22,8 @@ import {
   SelectValue,
 } from "@nourish/ui/select";
 
+import { parseServingSizes } from "~/lib/utils";
+
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface ReviewFoodItemProps extends CardProps {
@@ -40,6 +42,7 @@ function ReviewFoodItemCard({
   if (!foodItem) return null;
 
   const removeItem = () => form.remove(index);
+  const servingSizeOptions = parseServingSizes(foodItem.size);
 
   return (
     <Card
@@ -58,7 +61,7 @@ function ReviewFoodItemCard({
                 {foodItem.name}
               </h3>
               <p className="truncate text-sm font-medium leading-none text-muted-foreground">
-                {foodItem.description}
+                {foodItem.calories}
               </p>
             </div>
           </div>
@@ -76,16 +79,21 @@ function ReviewFoodItemCard({
           render={({ field }) => (
             <FormItem className="flex flex-[2] flex-row items-center gap-2 space-y-0">
               <FormLabel className="flex-shrink-0">Size</FormLabel>
-              <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <Select
+                onValueChange={field.onChange}
+                defaultValue={servingSizeOptions[0] || field.value}
+              >
                 <FormControl>
                   <SelectTrigger>
                     <SelectValue placeholder="Size" />
                   </SelectTrigger>
                 </FormControl>
                 <SelectContent>
-                  <SelectItem value="1 cup">{`1 cup (147g)`}</SelectItem>
-                  <SelectItem value="2 cup">{`2 cup (294g)`}</SelectItem>
-                  <SelectItem value="3 cup">{`3 cup (441g)`}</SelectItem>
+                  {servingSizeOptions.map((option, idx) => (
+                    <SelectItem key={idx} value={option}>
+                      {option}
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </FormItem>

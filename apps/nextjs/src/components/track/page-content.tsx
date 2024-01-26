@@ -23,7 +23,7 @@ function PageContent() {
     <Form {...form}>
       <FieldArrayForm {...form} {...fieldArray}>
         {/* Content */}
-        <main className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto overflow-x-hidden px-4 pb-12 pt-4">
+        <main className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto overflow-x-hidden pt-4">
           {/* Search results */}
           <SearchResults />
         </main>

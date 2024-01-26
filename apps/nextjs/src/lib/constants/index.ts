@@ -389,14 +389,14 @@ type IconColorMap = Record<number, string>;
 
 export const iconColorMap: IconColorMap = {
   0: "bg-gray-400", // No Dominance
-  1: "bg-green-500", // Green
-  2: "bg-purple-500", // Purple
+  1: "bg-purple-500", // Purple
+  2: "bg-green-500", // Green
   3: "bg-orange-500", // Orange
-  4: "bg-gradient-to-r from-green-500 to-purple-500", // Green-Purple
-  5: "bg-gradient-to-r from-green-500 to-orange-500", // Green-Orange
-  6: "bg-gradient-to-r from-purple-500 to-green-500", // Purple-Green
-  7: "bg-gradient-to-r from-purple-500 to-orange-500", // Purple-Orange
-  8: "bg-gradient-to-r from-orange-500 to-green-500", // Orange-Green
-  9: "bg-gradient-to-r from-orange-500 to-purple-500", // Orange-Purple
-  10: "bg-gradient-to-br from-green-500 via-purple-500 to-orange-500", // 3-Color
+  4: "bg-gradient-to-r from-purple-500 from-50% to-green-500 to-50%", // Purple-Green with a hard stop
+  5: "bg-gradient-to-r from-purple-500 from-50% to-orange-500 to-50%", // Purple-Orange with a hard stop
+  6: "bg-gradient-to-r from-green-500 from-50% to-purple-500 to-50%", // Green-Purple with a hard stop
+  7: "bg-gradient-to-r from-green-500 from-50% to-orange-500 to-50%", // Green-Orange with a hard stop
+  8: "bg-gradient-to-r from-orange-500 from-50% to-purple-500 to-50%", // Orange-Purple with a hard stop
+  9: "bg-gradient-to-r from-orange-500 from-50% to-green-500 to-50%", // Orange-Green with a hard stop
+  10: "bg-gradient-to-r from-[#22c55e_33%] via-[#a855f7_66%] to-[#f97316_100%]", // 3-Color with distinct thirds
 };

@@ -10,6 +10,7 @@ import { Card, CardContent } from "@nourish/ui/card";
 import { useFieldArrayFormContext } from "@nourish/ui/form";
 
 import { iconColorMap } from "~/lib/constants";
+import { getFirstServingSize } from "~/lib/utils";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
@@ -17,32 +18,31 @@ interface FoodItemProps extends CardProps {
   foodItem: FoodItem;
 }
 
-function getFirstServingSize(servingSizes: string) {
-  // Match the pattern of serving size followed by weight in parentheses
-  const match = servingSizes.match(/[^,]*\([^)]+\)/g);
-
-  // If there's a match, return the first one, otherwise return the entire string
-  return match ? match[0] : servingSizes;
-}
-
 export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
   const { id, name, serving_sizes, calories_per_100g, icon_color } = foodItem;
 
   const form = useFieldArrayFormContext<ReviewFoodsForm>();
 
-  const isSelected = form.fields.some((field) => field.id === id);
+  const isSelected = form.fields.some((field) => field.foodId === id);
 
   const toggleSelection = () => {
+    console.log(isSelected, form.fields, id, "toggleSelection");
     if (isSelected) {
+      console.log({ isSelected }, "remove");
       // Find the index of the item with the same id and remove it
-      const selectedIndex = form.fields.findIndex((field) => field.id === id);
+      const selectedIndex = form.fields.findIndex(
+        (field) => field.foodId === id,
+      );
       form.remove(selectedIndex);
     } else {
+      console.log({ isSelected, id }, "append");
       // appends the new item to the form state
       form.append({
-        id,
+        foodId: id,
         size: serving_sizes ?? "",
         quantity: 1,
+        name: name ?? "",
+        calories: `${calories_per_100g} cal`,
       });
     }
   };
@@ -64,7 +64,7 @@ export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
           <div className="flex flex-row items-center gap-2">
             <span
               className={cn(
-                "flex h-2 w-2 flex-shrink-0 translate-y-1 rounded-full",
+                "flex h-3 w-3 flex-shrink-0 rounded-full",
                 dotStyle,
               )}
             />

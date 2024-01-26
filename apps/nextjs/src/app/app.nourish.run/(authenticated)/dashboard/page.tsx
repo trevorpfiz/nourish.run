@@ -11,12 +11,12 @@ export const runtime = "edge";
 export default async function DashboardPage() {
   return (
     <div className="relative z-0 flex h-full w-full overflow-hidden bg-white">
-      <div className="relative flex h-full max-w-2xl flex-1 flex-col overflow-hidden bg-white">
+      <div className="relative flex h-full w-full max-w-2xl flex-col overflow-hidden bg-white">
         {/* TopNavbar */}
         <TopNavbar />
 
         {/* Content */}
-        <main className="relative flex h-full w-full flex-1 flex-col items-center gap-2 overflow-y-auto overflow-x-hidden pb-32">
+        <main className="flex h-full w-full flex-col items-center gap-2 overflow-y-auto overflow-x-hidden pb-32">
           {/* Macros donut chart */}
           <MacrosDonut />
           {/* Macros progress charts  */}

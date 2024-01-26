@@ -1,6 +1,6 @@
 "use client";
 
-import { use } from "react";
+import { use, useEffect } from "react";
 import { atom, useAtom } from "jotai";
 import { Search } from "lucide-react";
 import { matchSorter } from "match-sorter";
@@ -20,11 +20,17 @@ export default function SearchFoods(props: SearchFoodsProps) {
   const initialData = use(foodItems);
   const [, setSearchResults] = useAtom(searchResultsAtom);
 
+  useEffect(() => {
+    setSearchResults(initialData ?? []);
+  }, [initialData, setSearchResults]);
+
   const onSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
-    const matchedItems = matchSorter(initialData, query, { keys: ["name"] });
+    const matchedItems = matchSorter(initialData, query, {
+      keys: ["name"],
+    });
     console.log({ matchedItems });
-    setSearchResults(matchedItems);
+    setSearchResults(matchedItems ?? []);
   };
 
   return (

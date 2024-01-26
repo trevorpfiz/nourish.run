@@ -61,7 +61,7 @@ function ReviewItemsForm() {
           render={({ field }) => (
             <FormItem>
               {form.fields.map((field, index) => (
-                <ReviewFoodItemCard key={field.id} index={index} />
+                <ReviewFoodItemCard key={field.foodId} index={index} />
               ))}
               <FormMessage />
             </FormItem>
@@ -93,6 +93,7 @@ function ReviewItemsForm() {
           variant="primary"
           size="lg"
           className="w-full rounded-full uppercase"
+          disabled={form.fields.length === 0}
         >
           Add{" "}
           <Badge variant="secondary" className="ml-2">

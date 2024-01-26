@@ -1,7 +1,7 @@
 "use client";
 
 import type { CSSProperties } from "react";
-import { memo } from "react";
+import { forwardRef, memo } from "react";
 import { useAtom } from "jotai";
 import memoize from "memoize-one";
 import AutoSizer from "react-virtualized-auto-sizer";
@@ -22,12 +22,21 @@ interface RowProps {
 }
 
 const Row = memo(({ data, index, style }: RowProps) => {
-  // Data passed to List as "itemData" is available as props.data
   const { items } = data;
-  const item = items[index]!;
+  const item = items[index];
+
+  if (!item) {
+    return null;
+  }
 
   return (
-    <div style={style} key={index}>
+    <div
+      style={{
+        ...style,
+      }}
+      className="px-4 pb-2"
+      key={index}
+    >
       <FoodItemCard foodItem={item} />
     </div>
   );
@@ -54,25 +63,30 @@ export default function SearchResults() {
   // }
 
   return (
-    <div className="h-full w-full">
+    <div className="flex h-full w-full flex-col">
       <h3 className="px-4 pb-2 text-sm font-medium text-muted-foreground">
         Results
       </h3>
-      {searchResults.length > 0 && (
-        <AutoSizer>
-          {({ height, width }) => (
-            <List
-              height={height}
-              itemCount={8000}
-              itemData={itemData}
-              itemSize={72}
-              width={width}
-              className="px-4"
-            >
-              {Row}
-            </List>
-          )}
-        </AutoSizer>
+      {searchResults.length === 0 ? (
+        <div className="px-4 py-2 text-sm text-muted-foreground">
+          No results found.
+        </div>
+      ) : (
+        <div className="flex-1">
+          <AutoSizer>
+            {({ height, width }) => (
+              <List
+                height={height}
+                itemCount={searchResults.length}
+                itemData={itemData}
+                itemSize={72}
+                width={width}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
+        </div>
       )}
     </div>
   );

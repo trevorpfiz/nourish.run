@@ -7,9 +7,11 @@ export const SearchFoodItemSchema = z.object({
 export type SearchFoodItem = z.infer<typeof SearchFoodItemSchema>;
 
 export const ReviewFoodItemSchema = z.object({
-  id: z.number().min(1),
+  foodId: z.number().min(1),
   size: z.string().min(1),
   quantity: z.number().min(1),
+  name: z.string().min(1),
+  calories: z.string().min(1),
 });
 export type ReviewFoodItem = z.infer<typeof ReviewFoodItemSchema>;
 export const ReviewFoodsFormSchema = z.object({

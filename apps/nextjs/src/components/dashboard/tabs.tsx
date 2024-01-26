@@ -27,7 +27,7 @@ const Tabs = () => {
   return (
     <div className="relative z-10 w-full max-w-2xl bg-white px-8 py-4">
       {/* Floating "+" button */}
-      <div className="absolute bottom-0 right-4 flex items-center justify-center pb-24">
+      <div className="absolute bottom-0 right-4 mb-24 flex items-center justify-center">
         <Button className="h-12 w-12 rounded-full p-2" asChild>
           <Link href="/dashboard/track">
             <Plus color="white" strokeWidth={3} />

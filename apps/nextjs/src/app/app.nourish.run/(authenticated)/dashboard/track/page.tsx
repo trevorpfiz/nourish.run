@@ -7,8 +7,8 @@ import { LoaderComponent } from "~/components/ui/loader";
 import { api } from "~/trpc/server";
 
 export const runtime = "edge";
-export const revalidate = 3600; // revalidate at most every hour
-// export const revalidate = 86400 // revalidate at most every day
+// export const revalidate = 3600; // revalidate at most every hour
+export const revalidate = 86400; // revalidate at most every day
 
 // TODO: keep an eye on h-dvh
 export default async function TrackPage() {
