@@ -43,11 +43,11 @@ export const foodItemsToNutrients = mySqlTable(
   "food_items_to_nutrients",
   {
     food_item_id: bigint("food_item_id", {
-      mode: "bigint",
+      mode: "number",
       unsigned: true,
     }).notNull(),
     nutrient_id: bigint("nutrient_id", {
-      mode: "bigint",
+      mode: "number",
       unsigned: true,
     }).notNull(),
     quantity_per_100g: decimal("quantity_per_100g", {

@@ -15,11 +15,11 @@ export const nutrition = mySqlTable("nutrition", {
   id: serial("id").primaryKey(),
   user_id: varchar("user_id", { length: 255 }).notNull(),
   food_item_id: bigint("food_item_id", {
-    mode: "bigint",
+    mode: "number",
     unsigned: true,
   }).notNull(),
   meal_id: bigint("meal_id", {
-    mode: "bigint",
+    mode: "number",
     unsigned: true,
   }).notNull(),
   serving_size: varchar("serving_size", { length: 100 }),

@@ -1,7 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { Loader2 } from "lucide-react";
 
 import type { ReviewFoodsForm } from "@nourish/validators";
 import { Badge } from "@nourish/ui/badge";
@@ -13,14 +15,33 @@ import {
   useFieldArrayFormContext,
 } from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
+import { toast } from "@nourish/ui/toast";
 
 import { ReviewFoodItemCard } from "~/components/track/review-food-item-card";
+import { api } from "~/trpc/react";
 
 function ReviewItemsForm() {
   const form = useFieldArrayFormContext<ReviewFoodsForm>();
   const [internalTime, setInternalTime] = useState(format(new Date(), "HH:mm"));
   const [displayTime, setDisplayTime] = useState(format(new Date(), "h:mm aa"));
   const timeInputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
+
+  const utils = api.useUtils();
+  const createNutrition = api.nutrition.createMany.useMutation({
+    onSuccess: async () => {
+      form.reset();
+      await utils.meal.invalidate();
+      router.push("/dashboard");
+    },
+    onError: (err) => {
+      toast.error(
+        err?.data?.code === "UNAUTHORIZED"
+          ? "You must be logged in to track meals"
+          : "Failed to log meal",
+      );
+    },
+  });
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -33,7 +54,14 @@ function ReviewItemsForm() {
   }, []);
 
   function onSubmit(data: ReviewFoodsForm) {
-    // Handle form submission
+    const submissionData = {
+      foods: data.foods,
+      time: new Date(
+        `${format(new Date(), "yyyy-MM-dd")}T${internalTime}`,
+      ).toISOString(),
+    };
+
+    createNutrition.mutate(submissionData);
   }
 
   const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -93,12 +121,21 @@ function ReviewItemsForm() {
           variant="primary"
           size="lg"
           className="w-full rounded-full uppercase"
-          disabled={form.fields.length === 0}
+          disabled={form.fields.length === 0 || createNutrition.isPending}
         >
-          Add{" "}
-          <Badge variant="secondary" className="ml-2">
-            {form.fields.length}
-          </Badge>
+          {createNutrition.isPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Adding foods...
+            </>
+          ) : (
+            <>
+              Add{" "}
+              <Badge variant="secondary" className="ml-2">
+                {form.fields.length}
+              </Badge>
+            </>
+          )}
         </Button>
       </div>
     </form>
