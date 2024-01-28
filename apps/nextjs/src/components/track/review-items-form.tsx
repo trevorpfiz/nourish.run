@@ -50,7 +50,7 @@ function ReviewItemsForm() {
       setDisplayTime(format(now, "h:mm aa"));
     }, 60000); // Update every minute
 
-    return () => clearInterval(timer); // Clear interval on component unmount
+    return () => clearInterval(timer);
   }, []);
 
   function onSubmit(data: ReviewFoodsForm) {

@@ -223,6 +223,9 @@ importers:
       date-fns:
         specifier: ^3.2.0
         version: 3.2.0
+      date-fns-tz:
+        specifier: ^2.0.0
+        version: 2.0.0(date-fns@3.2.0)
       geist:
         specifier: ^1.2.0
         version: 1.2.0(next@14.1.0)
@@ -329,6 +332,9 @@ importers:
       '@trpc/server':
         specifier: next
         version: 11.0.0-next-alpha.152
+      date-fns:
+        specifier: ^3.2.0
+        version: 3.2.0
       superjson:
         specifier: 2.2.1
         version: 2.2.1
@@ -7699,6 +7705,14 @@ packages:
     resolution: {integrity: sha512-a9l6T1qqDogvvnw0nKlfZzqsyikEBZBClF39V3TFoKhDtGBqHu2HkuomJc02j5zft8zrUaXEuoicLeW54RkzPg==}
     engines: {node: '>= 14'}
     dev: true
+
+  /date-fns-tz@2.0.0(date-fns@3.2.0):
+    resolution: {integrity: sha512-OAtcLdB9vxSXTWHdT8b398ARImVwQMyjfYGkKD2zaGpHseG2UPHbHjXELReErZFxWdSLph3c2zOaaTyHfOhERQ==}
+    peerDependencies:
+      date-fns: '>=2.0.0'
+    dependencies:
+      date-fns: 3.2.0
+    dev: false
 
   /date-fns@2.30.0:
     resolution: {integrity: sha512-fnULvOpxnC5/Vg3NCiWelDsLiUc9bRwAPs/+LfTLNvetFCtCTN+yQz15C/fs4AwX1R9K5GLtLfn8QW+dWisaAw==}

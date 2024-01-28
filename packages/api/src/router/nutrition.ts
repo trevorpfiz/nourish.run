@@ -1,8 +1,9 @@
+import { differenceInMinutes, parseISO } from "date-fns";
 import { z } from "zod";
 
-import type { Nutrition } from "@nourish/db/src/schema";
+import type { MealWithNutrition } from "@nourish/db/src/schema";
 import { and, eq, gte, schema } from "@nourish/db";
-import { nutrition, users } from "@nourish/db/src/schema";
+import { meal } from "@nourish/db/src/schema";
 import { ReviewFoodsFormSchema } from "@nourish/validators";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -19,78 +20,73 @@ export const nutritionRouter = createTRPCRouter({
       const { foods, time } = input;
       const inputTime = new Date(time);
 
-      // Fetch recent nutrition items and their meal relation
-      const recentNutritionItems = await ctx.db.query.nutrition.findMany({
-        where: and(
-          eq(users.id, ctx.session.user.id),
-          gte(
-            nutrition.time,
-            new Date(inputTime.getTime() - 4 * 60 * 60 * 1000), // 4hrs ago
+      // Fetch recent meals
+      const fetchRecentMeals = async () => {
+        return await ctx.db.query.meal.findMany({
+          where: and(
+            eq(meal.user_id, ctx.session.user.id),
+            gte(
+              meal.startTime,
+              new Date(inputTime.getTime() - 4 * 60 * 60 * 1000), // 4hrs ago
+            ),
           ),
-        ),
-        with: {
-          meal: true,
-        },
-      });
-
-      // Group nutrition items by meal_id
-      interface MealWithNutritionItems {
-        mealId: number;
-        nutritionItems: Nutrition[];
-        time: Date | null;
-      }
-      type GroupedNutrition = Record<number, MealWithNutritionItems>;
-
-      const groupedNutrition = recentNutritionItems.reduce(
-        (acc: GroupedNutrition, item: Nutrition) => {
-          const mealId = item.meal_id;
-
-          if (!acc[mealId]) {
-            acc[mealId] = {
-              mealId: mealId,
-              nutritionItems: [],
-              time: item.time,
-            };
-          }
-
-          acc[mealId]?.nutritionItems.push(item);
-
-          return acc;
-        },
-        {} as GroupedNutrition,
-      );
+          with: {
+            nutrition: true,
+          },
+        });
+      };
 
       // meal grouping algorithm
-      const determineMealId = async () => {
-        for (const mealId in groupedNutrition) {
-          const items = groupedNutrition[mealId];
-          const firstItemTime = new Date(items[0].time);
-          const timeDiff = Math.abs(inputTime - firstItemTime);
+      const determineMealId = async (recentMeals: MealWithNutrition[]) => {
+        for (const meal of recentMeals) {
+          const mealStartTime = meal.startTime
+            ? new Date(meal.startTime)
+            : null;
 
-          // If time difference is ≤ 30mins with any item, use this meal
-          if (
-            items.some(
-              (item) =>
-                Math.abs(inputTime - new Date(item.time)) <= 30 * 60 * 1000,
-            )
-          ) {
-            return mealId;
-          }
+          if (mealStartTime) {
+            const startTimeDiff = Math.abs(
+              differenceInMinutes(inputTime, mealStartTime),
+            );
 
-          // If time difference with the first item is ≥ 2hrs, create a new meal
-          if (timeDiff >= 2 * 60 * 60 * 1000) {
-            break;
+            // If time difference is ≥ 2hrs, create a new meal
+            if (startTimeDiff >= 120) {
+              break;
+            }
+
+            // Get the latest nutrition item time in the current meal
+            let latestNutritionTime = mealStartTime;
+            if (meal.nutrition.length > 0) {
+              const latestNutritionItem =
+                meal.nutrition[meal.nutrition.length - 1];
+              if (latestNutritionItem?.time) {
+                latestNutritionTime = new Date(latestNutritionItem.time);
+              }
+            }
+
+            const nutritionTimeDiff = Math.abs(
+              differenceInMinutes(inputTime, latestNutritionTime),
+            );
+
+            // If time difference is ≤ 30mins, use this meal
+            if (nutritionTimeDiff <= 30) {
+              return meal.id;
+            }
           }
         }
 
         // Create a new meal if no existing meal fits
         const newMeal = await ctx.db.insert(schema.meal).values({
           user_id: ctx.session.user.id,
+          startTime: inputTime, // Set the startTime to the inputTime for the new meal
         });
         return newMeal.insertId;
       };
 
-      const mealId = await determineMealId();
+      // Fetch recent meals
+      const recentMeals = await fetchRecentMeals();
+
+      // Determine meal ID
+      const mealId = await determineMealId(recentMeals);
 
       // construct nutrition entries
       const formattedFoods = foods.map((food) => ({

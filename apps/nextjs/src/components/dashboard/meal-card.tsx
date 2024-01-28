@@ -31,7 +31,10 @@ export function MealCard({ meal, className, ...props }: MealProps) {
 
   return (
     <Link href={`/dashboard/meal/${mealId}`}>
-      <Card className={cn("w-36 hover:opacity-60", className)} {...props}>
+      <Card
+        className={cn("h-full w-36 hover:opacity-60", className)}
+        {...props}
+      >
         <CardHeader className="flex flex-row items-center justify-between gap-1 space-y-0 p-2">
           <CardDescription>Meal</CardDescription>
           <div className="flex flex-row items-center gap-1">

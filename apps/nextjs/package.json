@@ -31,6 +31,7 @@
     "@trpc/server": "next",
     "chart.js": "^4.4.1",
     "date-fns": "^3.2.0",
+    "date-fns-tz": "^2.0.0",
     "geist": "^1.2.0",
     "jotai": "^2.6.2",
     "lucide-react": "^0.309.0",

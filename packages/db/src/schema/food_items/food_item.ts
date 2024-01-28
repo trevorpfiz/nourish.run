@@ -25,7 +25,7 @@ export const foodItem = mySqlTable(
       precision: 10,
       scale: 4,
     }),
-    icon_color: tinyint("icon_color", { unsigned: true }),
+    icon_color: tinyint("icon_color"), // FIXME: You're about to change icon_color column type from tinyint to tinyint unsigned
     createdAt: timestamp("createdAt").defaultNow(),
     updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
