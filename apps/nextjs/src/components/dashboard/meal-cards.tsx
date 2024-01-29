@@ -3,6 +3,7 @@ import * as React from "react";
 import { ScrollArea, ScrollBar } from "@nourish/ui/scroll-area";
 
 import { MealCard } from "~/components/dashboard/meal-card";
+import { api } from "~/trpc/server";
 
 export interface Meal {
   time: string;
@@ -22,7 +23,10 @@ export const meals: Meal[] = [
   { time: "2023-11-09T18:01:00Z", foodItems: ["Honey"] }, // Dinner
 ];
 
-export function MealCards() {
+export async function MealCards() {
+  const currentDate = new Date().toISOString().split("T")[0]; // yyyy-mm-dd format
+  const meals = await api.meal.byDay({ date: currentDate! });
+
   return (
     <div className="relative w-full">
       <ScrollArea className="w-full whitespace-nowrap">

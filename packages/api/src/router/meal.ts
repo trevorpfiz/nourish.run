@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 import { and, desc, eq, gte, lt, schema } from "@nourish/db";
-import { nutrition } from "@nourish/db/src/schema";
+import { meal } from "@nourish/db/src/schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
@@ -11,6 +11,15 @@ export const mealRouter = createTRPCRouter({
       orderBy: desc(schema.meal.id),
     });
   }),
+
+  byId: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .query(({ ctx, input }) => {
+      return ctx.db.query.meal.findFirst({
+        where: eq(schema.meal.id, input.id),
+      });
+    }),
+
   byDay: protectedProcedure
     .input(
       z.object({
@@ -22,33 +31,22 @@ export const mealRouter = createTRPCRouter({
       const dateObj = new Date(date);
       const nextDay = new Date(dateObj.getTime() + 24 * 60 * 60 * 1000);
 
-      return ctx.db.query.nutrition
-        .findMany({
-          where: and(
-            eq(nutrition.user_id, ctx.session.user.id),
-            gte(nutrition.time, dateObj),
-            lt(nutrition.time, nextDay),
-          ),
-          with: {
-            meal: true,
+      const meals = ctx.db.query.meal.findMany({
+        where: and(
+          eq(meal.user_id, ctx.session.user.id),
+          gte(meal.startTime, dateObj),
+          lt(meal.startTime, nextDay),
+        ),
+        orderBy: desc(meal.startTime),
+        with: {
+          nutrition: {
+            with: {
+              foodItem: true,
+            },
           },
-          orderBy: desc(nutrition.time),
-        })
-        .then((nutritionItems) => {
-          // Group nutrition items by meal_id
-          const mealsByDay = nutritionItems.reduce((acc, item) => {
-            if (!acc[item.meal_id]) {
-              acc[item.meal_id] = {
-                mealId: item.meal_id,
-                nutritionItems: [],
-                time: item.time, // you might want to adjust this based on your needs
-              };
-            }
-            acc[item.meal_id].nutritionItems.push(item);
-            return acc;
-          }, {});
+        },
+      });
 
-          return Object.values(mealsByDay);
-        });
+      return meals;
     }),
 });

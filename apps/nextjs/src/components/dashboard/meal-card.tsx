@@ -2,6 +2,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { Clock } from "lucide-react";
 
+import type { MealWithNutritionWithFoodItem } from "@nourish/db/src/schema";
 import { cn } from "@nourish/ui";
 import { Badge } from "@nourish/ui/badge";
 import {
@@ -14,20 +15,17 @@ import {
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface MealProps extends CardProps {
-  meal: {
-    time: string;
-    foodItems: string[];
-  };
+  meal: MealWithNutritionWithFoodItem;
 }
 
 export function MealCard({ meal, className, ...props }: MealProps) {
-  const { time, foodItems } = meal;
+  const { id, startTime, nutrition } = meal;
   const mealId = 1;
 
   // Format the time to a more readable format, e.g., "3:17 AM"
-  const formattedTime = format(new Date(time), "p");
+  const formattedTime = format(new Date(startTime!), "p");
   // Determine the number of food items to display as a badge
-  const additionalItemsCount = foodItems.length > 2 ? foodItems.length - 2 : 0;
+  const additionalItemsCount = nutrition.length > 2 ? nutrition.length - 2 : 0;
 
   return (
     <Link href={`/dashboard/meal/${mealId}`}>
@@ -44,9 +42,9 @@ export function MealCard({ meal, className, ...props }: MealProps) {
         </CardHeader>
         <CardContent className="p-2">
           <ul>
-            {foodItems.slice(0, 2).map(
+            {nutrition.slice(0, 2).map(
               (
-                foodItem,
+                nutritionItem,
                 index, // Only take the first two items
               ) => (
                 <li
@@ -55,7 +53,7 @@ export function MealCard({ meal, className, ...props }: MealProps) {
                 >
                   <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
                   <p className="truncate text-sm font-medium leading-none">
-                    {foodItem}
+                    {nutritionItem.foodItem.name}
                   </p>
                 </li>
               ),

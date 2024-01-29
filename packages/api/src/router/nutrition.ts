@@ -1,4 +1,4 @@
-import { differenceInMinutes, parseISO } from "date-fns";
+import { differenceInMinutes } from "date-fns";
 import { z } from "zod";
 
 import type { MealWithNutrition } from "@nourish/db/src/schema";
@@ -100,6 +100,7 @@ export const nutritionRouter = createTRPCRouter({
 
       return ctx.db.insert(schema.nutrition).values(formattedFoods);
     }),
+
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
     return ctx.db
       .delete(schema.nutrition)
