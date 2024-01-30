@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import { useMutationState } from "@tanstack/react-query";
 import { getQueryKey } from "@trpc/react-query";
 import { useAtom } from "jotai";
@@ -18,8 +19,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@nourish/ui/select";
+import { toast } from "@nourish/ui/toast";
 
 import { selectedNutritionIdsAtom } from "~/components/meal/foods";
+import { parseServingSizes } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
 type CardProps = React.ComponentProps<typeof Card>;
@@ -38,13 +41,27 @@ function NutritionCard({
   );
   const utils = api.useUtils();
   const deleteManyNutritionKey = getQueryKey(api.nutrition.deleteMany);
-  const variables = useMutationState<string>({
+  const variables = useMutationState({
     filters: { mutationKey: deleteManyNutritionKey, status: "pending" },
     select: (mutation) => mutation.state.variables,
   });
 
+  const updateNutrition = api.nutrition.update.useMutation({
+    onError: (err) => {
+      toast.error(
+        err?.data?.code === "UNAUTHORIZED"
+          ? "You must be logged in to delete a food entry"
+          : "Failed to delete food entry",
+      );
+    },
+    onSettled: async () => {
+      await utils.meal.invalidate();
+    },
+  });
+
   const foodItem = nutritionItem.foodItem;
   const isSelected = selectedNutritionIds.includes(foodItem.id);
+  const servingSizeOptions = parseServingSizes(foodItem.serving_sizes ?? "");
 
   const toggleSelection = () => {
     setSelectedNutritionIds((currentSelected) => {
@@ -56,20 +73,34 @@ function NutritionCard({
     });
   };
 
-  // Function to handle size change
-  const handleSizeChange = (size) => {
-    const updatedItems = selectedNutritionIds.map((item) =>
-      item.id === foodItem.id ? { ...item, size: size } : item,
-    );
-    setSelectedNutritionIds(updatedItems);
+  const handleSizeChange = (size: string) => {
+    if (!size.trim()) {
+      // If the size is empty or just whitespace, do nothing
+      return;
+    }
+
+    const updatedItem = {
+      id: nutritionItem.id,
+      serving_size: size,
+    };
+
+    updateNutrition.mutate(updatedItem);
   };
 
-  // Function to handle quantity change
-  const handleQuantityChange = (e) => {
-    const updatedItems = selectedNutritionIds.map((item) =>
-      item.id === foodItem.id ? { ...item, quantity: e.target.value } : item,
-    );
-    setSelectedNutritionIds(updatedItems);
+  const handleQuantityChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const quantity = e.target.value;
+
+    if (!quantity.trim() || isNaN(Number(quantity))) {
+      // If the quantity is empty, just whitespace, or not a valid number, do nothing
+      return;
+    }
+
+    const updatedItem = {
+      id: nutritionItem.id,
+      servings: quantity,
+    };
+
+    updateNutrition.mutate(updatedItem);
   };
 
   return (
@@ -90,7 +121,7 @@ function NutritionCard({
                 {foodItem.name}
               </h3>
               <p className="truncate text-sm font-medium leading-none text-muted-foreground">
-                {foodItem.description}
+                {`${foodItem.calories_per_100g} cal`}
               </p>
             </div>
           </div>
@@ -109,15 +140,17 @@ function NutritionCard({
           <Label htmlFor="size">Size</Label>
           <Select
             onValueChange={handleSizeChange}
-            defaultValue={nutritionItem.serving_size}
+            defaultValue={nutritionItem.serving_size ?? ""}
           >
             <SelectTrigger id="size">
               <SelectValue placeholder="Size" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="1 cup">{`1 cup (147g)`}</SelectItem>
-              <SelectItem value="2 cup">{`2 cup (294g)`}</SelectItem>
-              <SelectItem value="3 cup">{`3 cup (441g)`}</SelectItem>
+              {servingSizeOptions.map((option, idx) => (
+                <SelectItem key={idx} value={option}>
+                  {option}
+                </SelectItem>
+              ))}
             </SelectContent>
           </Select>
         </div>
@@ -130,7 +163,7 @@ function NutritionCard({
             id="quantity"
             type="number"
             placeholder="Quantity"
-            value={nutritionItem.servings}
+            value={nutritionItem.servings ?? 1}
             onChange={handleQuantityChange}
           />
         </div>

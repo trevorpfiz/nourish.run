@@ -38,8 +38,8 @@ export default function Foods(props: FoodsProps) {
       onError: (err) => {
         toast.error(
           err?.data?.code === "UNAUTHORIZED"
-            ? "You must be logged in to delete a post"
-            : "Failed to delete post",
+            ? "You must be logged in to delete a food entry"
+            : "Failed to delete food entry",
         );
       },
       onSettled: async () => {

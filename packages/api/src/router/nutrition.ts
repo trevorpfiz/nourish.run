@@ -3,7 +3,7 @@ import { z } from "zod";
 
 import type { MealWithNutrition } from "@nourish/db/src/schema";
 import { and, desc, eq, gte, inArray, schema } from "@nourish/db";
-import { meal } from "@nourish/db/src/schema";
+import { insertNutritionSchema, meal } from "@nourish/db/src/schema";
 import { ReviewFoodsFormSchema } from "@nourish/validators";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -109,6 +109,17 @@ export const nutritionRouter = createTRPCRouter({
       }));
 
       return ctx.db.insert(schema.nutrition).values(formattedFoods);
+    }),
+
+  update: protectedProcedure
+    .input(insertNutritionSchema.partial())
+    .mutation(({ ctx, input }) => {
+      if (!input.id) return;
+
+      return ctx.db
+        .update(schema.nutrition)
+        .set(input)
+        .where(eq(schema.nutrition.id, input.id));
     }),
 
   delete: protectedProcedure.input(z.number()).mutation(({ ctx, input }) => {
