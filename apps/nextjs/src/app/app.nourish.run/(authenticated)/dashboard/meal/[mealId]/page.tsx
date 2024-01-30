@@ -1,16 +1,21 @@
+import { Suspense } from "react";
+
 import { MacrosDonut } from "~/components/dashboard/macros-donut";
 import { MacrosProgress } from "~/components/dashboard/macros-progress";
 import { NutrientsProgress } from "~/components/dashboard/nutrients-progress";
 import Foods from "~/components/meal/foods";
 import { MealTopBar } from "~/components/meal/meal-top-bar";
+import { api } from "~/trpc/server";
 
 export const runtime = "edge";
 
 export default async function MealPage({
   params,
 }: {
-  params: { mealId: string };
+  params: { mealId: number };
 }) {
+  const meal = api.meal.byId({ id: params.mealId });
+
   return (
     <div className="relative z-0 flex h-full w-full overflow-hidden bg-white">
       <div className="relative flex h-full max-w-2xl flex-1 flex-col overflow-hidden bg-white">
@@ -25,7 +30,9 @@ export default async function MealPage({
           <MacrosProgress />
           {/* TODO: Meal Images */}
           {/* Foods */}
-          <Foods />
+          <Suspense fallback={<div>Loading...</div>}>
+            <Foods meal={meal} mealId={params.mealId} />
+          </Suspense>
           {/* Nutrient progress charts */}
           <NutrientsProgress />
         </main>

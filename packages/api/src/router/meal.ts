@@ -17,6 +17,13 @@ export const mealRouter = createTRPCRouter({
     .query(({ ctx, input }) => {
       return ctx.db.query.meal.findFirst({
         where: eq(schema.meal.id, input.id),
+        with: {
+          nutrition: {
+            with: {
+              foodItem: true,
+            },
+          },
+        },
       });
     }),
 
@@ -48,5 +55,11 @@ export const mealRouter = createTRPCRouter({
       });
 
       return meals;
+    }),
+
+  delete: protectedProcedure
+    .input(z.number())
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.delete(schema.meal).where(eq(schema.meal.id, input));
     }),
 });

@@ -1,20 +1,14 @@
 "use client";
 
+import { useMutationState } from "@tanstack/react-query";
+import { getQueryKey } from "@trpc/react-query";
 import { useAtom } from "jotai";
-import { Check, X } from "lucide-react";
+import { Check } from "lucide-react";
 
-import type { ReviewFoodsForm } from "@nourish/validators";
+import type { NutritionWithFoodItem } from "@nourish/db/src/schema";
 import { cn } from "@nourish/ui";
 import { Badge } from "@nourish/ui/badge";
-import { Button } from "@nourish/ui/button";
 import { Card, CardContent, CardFooter } from "@nourish/ui/card";
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  useFieldArrayFormContext,
-} from "@nourish/ui/form";
 import { Input } from "@nourish/ui/input";
 import { Label } from "@nourish/ui/label";
 import {
@@ -25,50 +19,57 @@ import {
   SelectValue,
 } from "@nourish/ui/select";
 
-import { selectedMealItemsAtom } from "~/components/meal/foods";
+import { selectedNutritionIdsAtom } from "~/components/meal/foods";
+import { api } from "~/trpc/react";
 
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface NutritionCardProps extends CardProps {
-  index: number;
+  nutritionItem: NutritionWithFoodItem;
 }
 
-function NutritionCard({ index, className, ...props }: NutritionCardProps) {
-  const [selectedMealItems, setSelectedMealItems] = useAtom(
-    selectedMealItemsAtom,
+function NutritionCard({
+  nutritionItem,
+  className,
+  ...props
+}: NutritionCardProps) {
+  const [selectedNutritionIds, setSelectedNutritionIds] = useAtom(
+    selectedNutritionIdsAtom,
   );
-  const foodItem = /* retrieve food item details based on index or some identifier */;
-  const isSelected = selectedMealItems.some(item => item.id === foodItem.id);
+  const utils = api.useUtils();
+  const deleteManyNutritionKey = getQueryKey(api.nutrition.deleteMany);
+  const variables = useMutationState<string>({
+    filters: { mutationKey: deleteManyNutritionKey, status: "pending" },
+    select: (mutation) => mutation.state.variables,
+  });
+
+  const foodItem = nutritionItem.foodItem;
+  const isSelected = selectedNutritionIds.includes(foodItem.id);
 
   const toggleSelection = () => {
-    if (isSelected) {
-      const newSelection = selectedMealItems.filter(item => item.id !== foodItem.id);
-      setSelectedMealItems(newSelection);
-    } else {
-      setSelectedMealItems([...selectedMealItems, {
-        id: foodItem.id,
-        name: foodItem.name,
-        description: foodItem.description,
-        size: "", // default size
-        quantity: 1, // default quantity
-      }]);
-    }
+    setSelectedNutritionIds((currentSelected) => {
+      if (isSelected) {
+        return currentSelected.filter((id) => id !== foodItem.id);
+      } else {
+        return [...currentSelected, foodItem.id];
+      }
+    });
   };
 
   // Function to handle size change
   const handleSizeChange = (size) => {
-    const updatedItems = selectedMealItems.map(item => 
-      item.id === foodItem.id ? { ...item, size: size } : item
+    const updatedItems = selectedNutritionIds.map((item) =>
+      item.id === foodItem.id ? { ...item, size: size } : item,
     );
-    setSelectedMealItems(updatedItems);
+    setSelectedNutritionIds(updatedItems);
   };
 
   // Function to handle quantity change
   const handleQuantityChange = (e) => {
-    const updatedItems = selectedMealItems.map(item => 
-      item.id === foodItem.id ? { ...item, quantity: e.target.value } : item
+    const updatedItems = selectedNutritionIds.map((item) =>
+      item.id === foodItem.id ? { ...item, quantity: e.target.value } : item,
     );
-    setSelectedMealItems(updatedItems);
+    setSelectedNutritionIds(updatedItems);
   };
 
   return (
@@ -106,7 +107,10 @@ function NutritionCard({ index, className, ...props }: NutritionCardProps) {
         {/* Size */}
         <div className="flex flex-[2] flex-row items-center gap-2 space-y-0">
           <Label htmlFor="size">Size</Label>
-          <Select onValueChange={handleSizeChange} defaultValue={/* get default size from selectedMealItems */}>
+          <Select
+            onValueChange={handleSizeChange}
+            defaultValue={nutritionItem.serving_size}
+          >
             <SelectTrigger id="size">
               <SelectValue placeholder="Size" />
             </SelectTrigger>
@@ -126,8 +130,8 @@ function NutritionCard({ index, className, ...props }: NutritionCardProps) {
             id="quantity"
             type="number"
             placeholder="Quantity"
-            value={/* get quantity from selectedMealItems */}
-        onChange={handleQuantityChange}
+            value={nutritionItem.servings}
+            onChange={handleQuantityChange}
           />
         </div>
       </CardFooter>

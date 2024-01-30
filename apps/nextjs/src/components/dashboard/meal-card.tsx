@@ -2,7 +2,7 @@ import Link from "next/link";
 import { format } from "date-fns";
 import { Clock } from "lucide-react";
 
-import type { MealWithNutritionWithFoodItem } from "@nourish/db/src/schema";
+import type { RouterOutputs } from "@nourish/api";
 import { cn } from "@nourish/ui";
 import { Badge } from "@nourish/ui/badge";
 import {
@@ -15,7 +15,7 @@ import {
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface MealProps extends CardProps {
-  meal: MealWithNutritionWithFoodItem;
+  meal: RouterOutputs["meal"]["byDay"][number];
 }
 
 export function MealCard({ meal, className, ...props }: MealProps) {

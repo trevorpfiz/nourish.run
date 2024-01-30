@@ -2,13 +2,23 @@ import { differenceInMinutes } from "date-fns";
 import { z } from "zod";
 
 import type { MealWithNutrition } from "@nourish/db/src/schema";
-import { and, eq, gte, schema } from "@nourish/db";
+import { and, desc, eq, gte, inArray, schema } from "@nourish/db";
 import { meal } from "@nourish/db/src/schema";
 import { ReviewFoodsFormSchema } from "@nourish/validators";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
 
 export const nutritionRouter = createTRPCRouter({
+  all: protectedProcedure.query(({ ctx }) => {
+    return ctx.db.query.nutrition.findMany({
+      orderBy: desc(schema.nutrition.id),
+      limit: 10,
+      with: {
+        foodItem: true,
+      },
+    });
+  }),
+
   createMany: protectedProcedure
     .input(
       z.object({
@@ -106,4 +116,12 @@ export const nutritionRouter = createTRPCRouter({
       .delete(schema.nutrition)
       .where(eq(schema.nutrition.id, input));
   }),
+
+  deleteMany: protectedProcedure
+    .input(z.array(z.number()))
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db
+        .delete(schema.nutrition)
+        .where(inArray(schema.nutrition.id, input));
+    }),
 });
