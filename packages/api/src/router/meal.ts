@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { and, desc, eq, gte, lt, schema } from "@nourish/db";
+import { and, asc, desc, eq, gte, lt, schema } from "@nourish/db";
 import { meal } from "@nourish/db/src/schema";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
@@ -44,7 +44,7 @@ export const mealRouter = createTRPCRouter({
           gte(meal.startTime, dateObj),
           lt(meal.startTime, nextDay),
         ),
-        orderBy: desc(meal.startTime),
+        orderBy: asc(meal.startTime),
         with: {
           nutrition: {
             with: {

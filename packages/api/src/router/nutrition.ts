@@ -7,6 +7,7 @@ import { insertNutritionSchema, meal } from "@nourish/db/src/schema";
 import { ReviewFoodsFormSchema } from "@nourish/validators";
 
 import { createTRPCRouter, protectedProcedure } from "../trpc";
+import { getFirstServingSize } from "../utils";
 
 export const nutritionRouter = createTRPCRouter({
   all: protectedProcedure.query(({ ctx }) => {
@@ -103,7 +104,7 @@ export const nutritionRouter = createTRPCRouter({
         user_id: ctx.session.user.id,
         food_item_id: food.foodId,
         meal_id: Number(mealId),
-        serving_size: food.size,
+        serving_size: getFirstServingSize(food.size),
         servings: String(food.quantity), // FIXME: is there a better way to do this?
         time: inputTime,
       }));
@@ -131,6 +132,8 @@ export const nutritionRouter = createTRPCRouter({
   deleteMany: protectedProcedure
     .input(z.array(z.number()))
     .mutation(async ({ ctx, input }) => {
+      console.log(input);
+
       return ctx.db
         .delete(schema.nutrition)
         .where(inArray(schema.nutrition.id, input));

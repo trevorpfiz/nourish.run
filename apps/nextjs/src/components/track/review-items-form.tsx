@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { format } from "date-fns";
+import { useAtom } from "jotai";
 import { Loader2 } from "lucide-react";
 
 import type { ReviewFoodsForm } from "@nourish/validators";
@@ -17,11 +18,13 @@ import {
 import { Input } from "@nourish/ui/input";
 import { toast } from "@nourish/ui/toast";
 
+import { reviewDrawerOpenAtom } from "~/components/track/review-drawer";
 import { ReviewFoodItemCard } from "~/components/track/review-food-item-card";
 import { api } from "~/trpc/react";
 
 function ReviewItemsForm() {
   const form = useFieldArrayFormContext<ReviewFoodsForm>();
+  const [, setReviewDrawerOpen] = useAtom(reviewDrawerOpenAtom);
   const [internalTime, setInternalTime] = useState(format(new Date(), "HH:mm"));
   const [displayTime, setDisplayTime] = useState(format(new Date(), "h:mm aa"));
   const timeInputRef = useRef<HTMLInputElement>(null);
@@ -32,6 +35,7 @@ function ReviewItemsForm() {
     onSuccess: async () => {
       form.reset();
       await utils.meal.invalidate();
+      setReviewDrawerOpen(false);
       router.push("/dashboard");
     },
     onError: (err) => {

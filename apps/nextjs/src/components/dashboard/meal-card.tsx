@@ -20,7 +20,6 @@ interface MealProps extends CardProps {
 
 export function MealCard({ meal, className, ...props }: MealProps) {
   const { id, startTime, nutrition } = meal;
-  const mealId = 1;
 
   // Format the time to a more readable format, e.g., "3:17 AM"
   const formattedTime = format(new Date(startTime!), "p");
@@ -28,7 +27,7 @@ export function MealCard({ meal, className, ...props }: MealProps) {
   const additionalItemsCount = nutrition.length > 2 ? nutrition.length - 2 : 0;
 
   return (
-    <Link href={`/dashboard/meal/${mealId}`}>
+    <Link href={`/dashboard/meal/${id}`}>
       <Card
         className={cn("h-full w-36 hover:opacity-60", className)}
         {...props}

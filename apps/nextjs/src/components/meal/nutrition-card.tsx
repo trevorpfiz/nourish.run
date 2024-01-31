@@ -89,16 +89,13 @@ function NutritionCard({
     },
   });
 
-  const foodItem = nutritionItem.foodItem;
-  const isSelected = selectedNutritionIds.includes(foodItem.id);
-  const servingSizeOptions = parseServingSizes(foodItem.serving_sizes ?? "");
-
+  const isSelected = selectedNutritionIds.includes(nutritionItem.id);
   const toggleSelection = () => {
     setSelectedNutritionIds((currentSelected) => {
       if (isSelected) {
-        return currentSelected.filter((id) => id !== foodItem.id);
+        return currentSelected.filter((id) => id !== nutritionItem.id);
       } else {
-        return [...currentSelected, foodItem.id];
+        return [...currentSelected, nutritionItem.id];
       }
     });
   };
@@ -133,10 +130,13 @@ function NutritionCard({
     updateNutrition.mutate(updatedItem);
   };
 
+  const foodItem = nutritionItem.foodItem;
+  const servingSizeOptions = parseServingSizes(foodItem.serving_sizes ?? "");
+  console.log("servingSizeOptions", servingSizeOptions);
   return (
     <Card
       className={cn(
-        "flex w-full flex-col items-center justify-between",
+        "flex w-full cursor-pointer flex-col items-center justify-between hover:opacity-60",
         className,
       )}
       onClick={toggleSelection}

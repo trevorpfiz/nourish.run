@@ -37,9 +37,6 @@ export default function Foods(props: FoodsProps) {
     api.nutrition.deleteMany.useMutation({
       // When mutate is called:
       onMutate: async (ids) => {
-        // Clear selected items
-        setSelectedNutritionIds([]);
-
         // Cancel any outgoing refetches
         // (so they don't overwrite our optimistic update)
         await utils.meal.all.cancel();
@@ -78,6 +75,8 @@ export default function Foods(props: FoodsProps) {
         );
       },
       onSettled: async () => {
+        // Clear selected items
+        setSelectedNutritionIds([]);
         // Sync with server once mutation has settled
         await utils.meal.invalidate();
       },
@@ -92,8 +91,8 @@ export default function Foods(props: FoodsProps) {
   };
 
   return (
-    <div className="flex flex-col items-center gap-4">
-      <div className="flex items-center justify-between gap-2">
+    <div className="flex w-full flex-col items-center gap-4 px-4">
+      <div className="flex w-full items-center justify-between gap-2">
         <div className="flex items-center gap-2">
           <h3>Foods</h3>
           <Button className="h-6 w-6 rounded-md p-2" asChild>
@@ -107,11 +106,9 @@ export default function Foods(props: FoodsProps) {
         </Button>
       </div>
       {/* Nutrition cards */}
-      <div>
-        {meal?.nutrition.map((item, index) => (
-          <NutritionCard key={item.id} nutritionItem={item} />
-        ))}
-      </div>
+      {meal?.nutrition.map((item, index) => (
+        <NutritionCard key={item.id} nutritionItem={item} />
+      ))}
     </div>
   );
 }

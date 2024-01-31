@@ -12,16 +12,19 @@ export const runtime = "edge";
 export default async function MealPage({
   params,
 }: {
-  params: { mealId: number };
+  params: { mealId: string };
 }) {
-  const meal = api.meal.byId({ id: params.mealId });
+  const mealId = Number(params.mealId); // FIXME: is this how to do it?
+
+  const meal = api.meal.byId({ id: mealId });
 
   return (
     <div className="relative z-0 flex h-full w-full overflow-hidden bg-white">
       <div className="relative flex h-full max-w-2xl flex-1 flex-col overflow-hidden bg-white">
         {/* TopNavbar */}
-        <MealTopBar />
-
+        <Suspense fallback={<div>Loading...</div>}>
+          <MealTopBar meal={meal} />
+        </Suspense>
         {/* Content */}
         <main className="relative flex h-full w-full flex-1 flex-col items-center gap-2 overflow-y-auto overflow-x-hidden">
           {/* Macros donut chart */}
@@ -31,7 +34,7 @@ export default async function MealPage({
           {/* TODO: Meal Images */}
           {/* Foods */}
           <Suspense fallback={<div>Loading...</div>}>
-            <Foods meal={meal} mealId={params.mealId} />
+            <Foods meal={meal} mealId={mealId} />
           </Suspense>
           {/* Nutrient progress charts */}
           <NutrientsProgress />
