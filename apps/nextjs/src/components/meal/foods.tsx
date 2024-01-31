@@ -35,7 +35,42 @@ export default function Foods(props: FoodsProps) {
 
   const { isPending, submittedAt, variables, mutate, isError } =
     api.nutrition.deleteMany.useMutation({
-      onError: (err) => {
+      // When mutate is called:
+      onMutate: async (ids) => {
+        // Clear selected items
+        setSelectedNutritionIds([]);
+
+        // Cancel any outgoing refetches
+        // (so they don't overwrite our optimistic update)
+        await utils.meal.all.cancel();
+
+        // Snapshot the previous value
+        const previousMealData = utils.meal.byId.getData({ id: props.mealId });
+
+        // Optimistically update to the new value
+        utils.meal.byId.setData({ id: props.mealId }, (old) => {
+          if (!old) {
+            return undefined;
+          }
+
+          return {
+            ...old,
+            nutrition: old.nutrition.filter((item) => !ids.includes(item.id)),
+          };
+        });
+
+        // Return a context object with the snapshotted value
+        return { previousMealData };
+      },
+      // If the mutation fails,
+      // use the context returned from onMutate to roll back
+      onError: (err, ids, context) => {
+        if (!context) {
+          return;
+        }
+
+        utils.meal.byId.setData({ id: props.mealId }, context.previousMealData);
+
         toast.error(
           err?.data?.code === "UNAUTHORIZED"
             ? "You must be logged in to delete a food entry"
@@ -43,6 +78,7 @@ export default function Foods(props: FoodsProps) {
         );
       },
       onSettled: async () => {
+        // Sync with server once mutation has settled
         await utils.meal.invalidate();
       },
     });

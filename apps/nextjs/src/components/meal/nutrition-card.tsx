@@ -1,8 +1,6 @@
 "use client";
 
 import React from "react";
-import { useMutationState } from "@tanstack/react-query";
-import { getQueryKey } from "@trpc/react-query";
 import { useAtom } from "jotai";
 import { Check } from "lucide-react";
 
@@ -40,14 +38,46 @@ function NutritionCard({
     selectedNutritionIdsAtom,
   );
   const utils = api.useUtils();
-  const deleteManyNutritionKey = getQueryKey(api.nutrition.deleteMany);
-  const variables = useMutationState({
-    filters: { mutationKey: deleteManyNutritionKey, status: "pending" },
-    select: (mutation) => mutation.state.variables,
-  });
 
   const updateNutrition = api.nutrition.update.useMutation({
-    onError: (err) => {
+    onMutate: async (updatedItem) => {
+      await utils.meal.all.cancel();
+      const previousMealData = utils.meal.byId.getData({
+        id: nutritionItem.meal_id,
+      });
+      // Optimistically update to the new value
+      utils.meal.byId.setData({ id: nutritionItem.meal_id }, (old) => {
+        if (!old) {
+          return undefined;
+        }
+
+        return {
+          ...old,
+          nutrition: old.nutrition.map((item) => {
+            if (item.id === updatedItem.id) {
+              return {
+                ...item,
+                ...updatedItem,
+              };
+            }
+
+            return item;
+          }),
+        };
+      });
+
+      return { previousMealData };
+    },
+    onError: (err, updatedItem, context) => {
+      if (!context) {
+        return;
+      }
+
+      utils.meal.byId.setData(
+        { id: nutritionItem.meal_id },
+        context.previousMealData,
+      );
+
       toast.error(
         err?.data?.code === "UNAUTHORIZED"
           ? "You must be logged in to delete a food entry"
