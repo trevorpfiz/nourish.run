@@ -12,6 +12,8 @@ import {
   CardHeader,
 } from "@nourish/ui/card";
 
+import { Dot } from "~/components/ui/dot";
+
 type CardProps = React.ComponentProps<typeof Card>;
 
 interface MealProps extends CardProps {
@@ -22,7 +24,7 @@ export function MealCard({ meal, className, ...props }: MealProps) {
   const { id, startTime, nutrition } = meal;
 
   // Format the time to a more readable format, e.g., "3:17 AM"
-  const formattedTime = format(new Date(startTime!), "p");
+  const formattedTime = format(new Date(startTime), "p");
   // Determine the number of food items to display as a badge
   const additionalItemsCount = nutrition.length > 2 ? nutrition.length - 2 : 0;
 
@@ -48,9 +50,9 @@ export function MealCard({ meal, className, ...props }: MealProps) {
               ) => (
                 <li
                   key={index}
-                  className="grid grid-cols-[25px_1fr] items-start pb-2"
+                  className="flex flex-row items-center justify-start gap-2 pb-2"
                 >
-                  <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
+                  <Dot colorIndex={nutritionItem.foodItem.icon_color} />
                   <p className="truncate text-sm font-medium leading-none">
                     {nutritionItem.foodItem.name}
                   </p>

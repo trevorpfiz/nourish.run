@@ -7,7 +7,7 @@ import { mySqlTable } from "../_table";
 export const meal = mySqlTable("meal", {
   id: serial("id").primaryKey(),
   user_id: varchar("user_id", { length: 255 }).notNull(),
-  startTime: timestamp("startTime"),
+  startTime: timestamp("startTime").notNull().defaultNow(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").onUpdateNow(),
 });

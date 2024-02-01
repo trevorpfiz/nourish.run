@@ -12,6 +12,7 @@ export const ReviewFoodItemSchema = z.object({
   quantity: z.number().min(1),
   name: z.string().min(1),
   calories: z.string().min(1),
+  iconColor: z.number(),
 });
 export type ReviewFoodItem = z.infer<typeof ReviewFoodItemSchema>;
 export const ReviewFoodsFormSchema = z.object({

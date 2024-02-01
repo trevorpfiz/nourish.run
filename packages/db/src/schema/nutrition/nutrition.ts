@@ -24,7 +24,7 @@ export const nutrition = mySqlTable("nutrition", {
   }).notNull(),
   serving_size: varchar("serving_size", { length: 100 }),
   servings: decimal("servings", { precision: 8, scale: 3 }),
-  time: timestamp("time"),
+  time: timestamp("time").notNull().defaultNow(),
   createdAt: timestamp("createdAt").defaultNow(),
   updatedAt: timestamp("updatedAt").onUpdateNow(),
 });

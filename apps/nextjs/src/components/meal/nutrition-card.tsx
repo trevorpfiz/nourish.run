@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import { format } from "date-fns";
 import { useAtom } from "jotai";
-import { Check } from "lucide-react";
+import { Check, Clock } from "lucide-react";
 
 import type { NutritionWithFoodItem } from "@nourish/db/src/schema";
 import { cn } from "@nourish/ui";
@@ -20,6 +21,7 @@ import {
 import { toast } from "@nourish/ui/toast";
 
 import { selectedNutritionIdsAtom } from "~/components/meal/foods";
+import { Dot } from "~/components/ui/dot";
 import { parseServingSizes } from "~/lib/utils";
 import { api } from "~/trpc/react";
 
@@ -132,12 +134,14 @@ function NutritionCard({
 
   const foodItem = nutritionItem.foodItem;
   const servingSizeOptions = parseServingSizes(foodItem.serving_sizes ?? "");
-  console.log("servingSizeOptions", servingSizeOptions);
+  const formattedTime = format(new Date(nutritionItem.time), "p");
+
   return (
     <Card
       className={cn(
         "flex w-full cursor-pointer flex-col items-center justify-between hover:opacity-60",
         className,
+        isSelected && "border-black",
       )}
       onClick={toggleSelection}
       {...props}
@@ -145,7 +149,7 @@ function NutritionCard({
       <CardContent className="w-full p-4">
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-row items-center gap-2">
-            <span className="flex h-2 w-2 flex-shrink-0 translate-y-1 rounded-full bg-sky-500" />
+            <Dot colorIndex={foodItem.icon_color} />
             <div className="flex flex-col gap-1">
               <h3 className="truncate text-sm font-bold leading-none">
                 {foodItem.name}
@@ -155,12 +159,9 @@ function NutritionCard({
               </p>
             </div>
           </div>
-          <div className="flex min-w-12 flex-shrink-0 justify-end">
-            {isSelected && (
-              <Badge variant="default">
-                <Check size={16} />
-              </Badge>
-            )}
+          <div className="flex min-w-12 flex-shrink-0 flex-row items-center justify-end gap-1">
+            <Clock size={16} className="text-muted-foreground" />
+            <p className="text-sm text-muted-foreground">{formattedTime}</p>
           </div>
         </div>
       </CardContent>

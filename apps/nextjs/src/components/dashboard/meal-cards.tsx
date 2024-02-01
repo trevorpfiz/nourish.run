@@ -5,24 +5,6 @@ import { ScrollArea, ScrollBar } from "@nourish/ui/scroll-area";
 import { MealCard } from "~/components/dashboard/meal-card";
 import { api } from "~/trpc/react";
 
-export interface Meal {
-  time: string;
-  foodItems: string[];
-}
-
-export const mealsData: Meal[] = [
-  {
-    time: "2023-11-09T07:01:00Z",
-    foodItems: ["Chicken Breast", "Strawberries"],
-  }, // Breakfast
-  {
-    time: "2023-11-09T11:31:00Z",
-    foodItems: ["Cheddar Cheese", "Turkey", "Mayo", "Bread"],
-  }, // Lunch
-  { time: "2023-11-09T14:01:00Z", foodItems: ["Chocolate Cake"] }, // Snack
-  { time: "2023-11-09T18:01:00Z", foodItems: ["Honey"] }, // Dinner
-];
-
 export function MealCards() {
   const currentDate = new Date().toISOString().split("T")[0]; // yyyy-mm-dd format
   const { isPending, isError, data, error } = api.meal.byDay.useQuery({
@@ -34,7 +16,8 @@ export function MealCards() {
   }
 
   return (
-    <div className="relative w-full">
+    <div className="relative flex w-full flex-col">
+      <h2 className="px-4 pb-1 text-xl font-semibold">Meals and Snacks</h2>
       <ScrollArea className="w-full whitespace-nowrap">
         <div className="flex w-max space-x-4 px-4 py-2">
           {isPending ? (

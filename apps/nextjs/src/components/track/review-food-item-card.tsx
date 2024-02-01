@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@nourish/ui/select";
 
+import { Dot } from "~/components/ui/dot";
 import { parseServingSizes } from "~/lib/utils";
 
 type CardProps = React.ComponentProps<typeof Card>;
@@ -55,7 +56,7 @@ function ReviewFoodItemCard({
       <CardContent className="w-full p-4">
         <div className="flex flex-row items-center justify-between gap-2">
           <div className="flex flex-row items-center gap-2">
-            <span className="flex h-2 w-2 flex-shrink-0 translate-y-1 rounded-full bg-sky-500" />
+            <Dot colorIndex={foodItem.iconColor} />
             <div className="flex flex-col gap-1">
               <h3 className="truncate text-sm font-bold leading-none">
                 {foodItem.name}

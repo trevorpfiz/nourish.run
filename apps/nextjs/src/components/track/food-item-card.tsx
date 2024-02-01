@@ -9,7 +9,7 @@ import { Badge } from "@nourish/ui/badge";
 import { Card, CardContent } from "@nourish/ui/card";
 import { useFieldArrayFormContext } from "@nourish/ui/form";
 
-import { iconColorMap } from "~/lib/constants";
+import { Dot } from "~/components/ui/dot";
 import { getFirstServingSize } from "~/lib/utils";
 
 type CardProps = React.ComponentProps<typeof Card>;
@@ -43,12 +43,12 @@ export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
         quantity: 1,
         name: name ?? "",
         calories: `${calories_per_100g} cal`,
+        iconColor: icon_color ?? 0,
       });
     }
   };
 
   const firstServingSize = getFirstServingSize(serving_sizes ?? "");
-  const dotStyle = iconColorMap[icon_color ?? 0] ?? "bg-gray-400";
 
   return (
     <Card
@@ -62,12 +62,7 @@ export function FoodItemCard({ foodItem, className, ...props }: FoodItemProps) {
       <CardContent className="flex-grow p-4">
         <div className="flex flex-row items-center justify-between gap-1">
           <div className="flex flex-row items-center gap-2">
-            <span
-              className={cn(
-                "flex h-3 w-3 flex-shrink-0 rounded-full",
-                dotStyle,
-              )}
-            />
+            <Dot colorIndex={icon_color} />
             <div className="flex flex-col gap-1">
               <h3 className="truncate text-sm font-bold leading-none">
                 {name}

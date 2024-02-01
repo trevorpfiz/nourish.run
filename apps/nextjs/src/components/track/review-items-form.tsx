@@ -33,9 +33,9 @@ function ReviewItemsForm() {
   const utils = api.useUtils();
   const createNutrition = api.nutrition.createMany.useMutation({
     onSuccess: async () => {
-      form.reset();
       await utils.meal.invalidate();
       setReviewDrawerOpen(false);
+      form.reset();
       router.push("/dashboard");
     },
     onError: (err) => {
