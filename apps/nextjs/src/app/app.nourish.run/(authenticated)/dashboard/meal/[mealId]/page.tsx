@@ -30,7 +30,9 @@ export default async function MealPage({
           {/* Macros donut chart */}
           <MacrosDonut />
           {/* Macros progress charts  */}
-          <MacrosProgress />
+          <Suspense fallback={<div>Loading...</div>}>
+            <MacrosProgress meal={meal} />
+          </Suspense>
           {/* TODO: Meal Images */}
           {/* Foods */}
           <Suspense fallback={<div>Loading...</div>}>

@@ -26,6 +26,16 @@ export default (phase, { defaultConfig }) => {
         },
       ],
     },
+    // Extend webpack configuration to include VeliteWebpackPlugin
+    webpack: (config, { isServer }) => {
+      // Initialize VeliteWebpackPlugin with any specific options you might have
+      // For demonstration, no options are passed
+      config.plugins.push(new VeliteWebpackPlugin());
+
+      // Return the modified configuration
+      return config;
+    },
+
     /** We already do linting and typechecking as separate tasks in CI */
     eslint: { ignoreDuringBuilds: true },
     typescript: { ignoreBuildErrors: true },
@@ -47,3 +57,23 @@ export default (phase, { defaultConfig }) => {
 
   return nextConfig;
 };
+
+class VeliteWebpackPlugin {
+  static started = false;
+  constructor(/** @type {import('velite').Options} */ options = {}) {
+    this.options = options;
+  }
+  apply(/** @type {import('webpack').Compiler} */ compiler) {
+    // executed three times in nextjs !!!
+    // twice for the server (nodejs / edge runtime) and once for the client
+    compiler.hooks.beforeCompile.tap("VeliteWebpackPlugin", async () => {
+      if (VeliteWebpackPlugin.started) return;
+      VeliteWebpackPlugin.started = true;
+      const dev = compiler.options.mode === "development";
+      this.options.watch = this.options.watch ?? dev;
+      this.options.clean = this.options.clean ?? !dev;
+      const { build } = await import("velite");
+      await build(this.options); // start velite
+    });
+  }
+}
