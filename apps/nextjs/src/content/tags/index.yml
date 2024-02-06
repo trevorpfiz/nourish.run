@@ -1,0 +1,8 @@
+- name: Updates
+  slug: updates
+
+- name: Science
+  slug: science
+
+- name: Engineering
+  slug: engineering

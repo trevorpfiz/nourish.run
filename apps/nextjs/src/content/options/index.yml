@@ -1,0 +1,32 @@
+name: Nourish
+title: Nourish
+description: Nourish is an open source nutritional health platform. Optimize your nutrition for better health and performance.
+keywords:
+  - Blog
+  - Nourish
+  - nutrition
+  - tracking
+author:
+  name: Trevor
+  email: trevor@nourish.run
+  url: https://nourish.run
+links:
+  - text: HOME
+    link: /
+    type: navigation
+  - text: Blog
+    link: /blog
+    type: navigation
+  - text: Privacy Policy
+    link: /privacy-policy
+    type: copyright
+  - text: Terms of Service
+    link: /terms-of-service
+    type: copyright
+socials:
+  - name: GitHub
+    icon: github
+    link: https://github.com/nourish-run/nourish.run
+  - name: Twitter
+    icon: twitter
+    link: https://twitter.com/nourishrun

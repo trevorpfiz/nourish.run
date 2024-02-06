@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { Button } from "@nourish/ui/button";
 
 import { GetStartedButton } from "~/components/auth/get-started-button";
@@ -12,6 +14,7 @@ export default function HomePage() {
         <GetStartedButton>
           <Button>Get Started</Button>
         </GetStartedButton>
+        <Link href="/blog">Blog</Link>
       </div>
     </main>
   );
